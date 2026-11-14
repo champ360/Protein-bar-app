@@ -71,7 +71,7 @@
     .mini-art.core { --art:#c8b8e8; background:#f0ebf9; }
     .mini-art.millet { --art:#edc99c; background:#f8f0e6; }
     .mini-art.mini { --art:#eab9c8; background:#f8edf0; }
-    .tag { display:inline-flex; align-items:center; padding:4px 7px; border-radius:999px; color:#5d526e; background:var(--lavender); font-size:9px; line-height:1; letter-spacing:.08em; font-weight:850; }
+    .tag { display:inline-flex; align-items:center; padding:4px 7px; border-radius:999px; color:#6f6b76; background:#ebe9ee; font-size:9px; line-height:1; letter-spacing:.08em; font-weight:850; }
     .tag.tried { background:#e1f1e7; color:#47785e; letter-spacing:0; }
     .tag.tried.rating-good, .read-only-log span.rating-good { background:#dff2e5; color:#286742; }
     .tag.tried.rating-mid, .read-only-log span.rating-mid { background:#fff0c9; color:#7d5b10; }
@@ -253,7 +253,7 @@
     :root[data-theme="dark"] .empty,
     :root[data-theme="dark"] .tasting-head span,
     :root[data-theme="dark"] .edit-rating-title { color:var(--ink-soft); }
-    :root[data-theme="dark"] .tag { color:#e2d9f3; background:#39334a; }
+    :root[data-theme="dark"] .tag { color:#b4afbd; background:#33313b; }
     :root[data-theme="dark"] .tag.tried { background:#244333; color:#a9dfbd; }
     :root[data-theme="dark"] .availability-pills span { background:#244333; color:#a9dfbd; }
     :root[data-theme="dark"] .availability-pills span.off { background:var(--surface-2); color:var(--muted); }
@@ -407,6 +407,13 @@ function filteredBars() {
   list=[...groups.values()].map(group=>group.tasting || group.representative);
  }
  list.sort((a,b)=>{
+  if(sortMode==='rating') {
+   const ra=a.tried && a.rating!=null ? Number(a.rating) : null, rb=b.tried && b.rating!=null ? Number(b.rating) : null;
+   if(ra!=null && rb!=null && ra!==rb) return rb-ra;
+   if(ra!=null && rb==null) return -1;
+   if(ra==null && rb!=null) return 1;
+   return proteinEfficiency(b)-proteinEfficiency(a) || b.protein-a.protein;
+  }
   if(sortMode==='price20') return (bestPrice20(a)?.value ?? Infinity)-(bestPrice20(b)?.value ?? Infinity) || proteinEfficiency(b)-proteinEfficiency(a);
   return proteinEfficiency(b)-proteinEfficiency(a) || b.protein-a.protein;
  });
@@ -425,7 +432,7 @@ function browsePage() {
   ? `<div class="taste-hero"><div><div class="eyebrow">YOUR AVERAGE RATING</div><h2>${avgRating()} <span style="font-size:13px;color:#8b819c">/ 10</span></h2><p>${ratedBars().length} rated · ${triedBars().length} tried</p></div><div class="taste-score"><b>${triedBars().length}</b><span>TRIED</span></div></div><div class="taste-tip"><div class="tip-dot">✳</div><div>Tap a bar to change its tried status or rating. Saved on this phone.</div></div>`
   : `<div class="search-wrap">${svg('search')}<input id="searchInput" type="search" placeholder="Search a flavour or series…" value="${escapeHtml(searchText)}" autocomplete="off"></div>
    <div class="filter-row">${['All','PRO','Core','Millet','Mini'].map(s=>`<button class="filter-chip ${seriesFilter===s?'active':''}" data-series="${s}">${s}${s==='All'?'<span class="count">23</span>':''}</button>`).join('')}</div><div class="unique-row"><label class="unique-toggle"><input type="checkbox" id="uniqueFlavours" ${uniqueFlavoursOnly?'checked':''}><span class="switch"></span><span>Unique flavours</span></label></div>
-   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · high to low</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · low to high</option></select></div>`;
+   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · high to low</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · low to high</option><option value="rating" ${sortMode==='rating'?'selected':''}>My rating · high to low</option></select></div>`;
  return `<div class="page-title"><div class="eyebrow">${isTasted?'YOUR TRIED BARS':'THE FULL COLLECTION'}</div><h1>${isTasted?'Your tried bars.':'Protein bars, compared.'}</h1><p id="pageSummary">${summaryText(items.length)}</p></div>
   ${header}
   <div class="results-label"><span id="resultCount">${resultLabel(items.length)}</span><span>Tap a card for details ↗</span></div>
@@ -573,6 +580,7 @@ function cleanEdits(source) {
  const out={};
  if(!source || typeof source!=='object' || Array.isArray(source)) return out;
  Object.keys(source).forEach(key=>{
+  if(!/^\d+$/.test(key)) return;
   const id=Number(key);
   if(!BARS.some(b=>b.id===id)) return;
   const entry=source[key];
@@ -596,13 +604,12 @@ function backupFileName() {
  return `barbook-backup-${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}.json`;
 }
 function settingsInnerHtml() {
- const tried=triedBars().length, rated=ratedBars().length;
  return `<div class="sheet-handle"></div>
-  <div class="sheet-top"><div class="sheet-title"><div><h2>Settings</h2><p>Barbook v${APP_VERSION} · everything stays on this phone</p></div></div><button class="close-button" data-close="button" aria-label="Close">×</button></div>
-  <div class="detail-section"><h3>Appearance</h3><div class="edit-state three">${[['light','Light'],['dark','Dark'],['system','System']].map(([id,label])=>`<button class="edit-option ${themePref===id?'active':''}" data-theme-set="${id}">${label}</button>`).join('')}</div><p class="edit-note">System follows your phone's light or dark setting.</p></div>
+  <div class="sheet-top"><div class="sheet-title"><div><h2>Settings</h2></div></div><button class="close-button" data-close="button" aria-label="Close">×</button></div>
+  <div class="detail-section"><h3>Appearance</h3><div class="edit-state three">${[['light','Light'],['dark','Dark'],['system','System']].map(([id,label])=>`<button class="edit-option ${themePref===id?'active':''}" data-theme-set="${id}">${label}</button>`).join('')}</div></div>
   <div class="detail-section"><h3>Backup</h3>
-   <div class="setting-row"><div><b>Export ratings</b><small>${plural(tried,'tried bar')} · ${rated} rated. Saves a file you can keep.</small></div><button class="edit-log-button" data-export>Export</button></div>
-   <div class="setting-row"><div><b>Import ratings</b><small>Replace current ratings with a Barbook backup file.</small></div><button class="edit-log-button" data-import>Import</button></div>
+   <div class="setting-row"><div><b>Export ratings</b><small>Saves a file you can keep</small></div><button class="edit-log-button" data-export>Export</button></div>
+   <div class="setting-row"><div><b>Import ratings</b><small>Replace ratings from a backup file</small></div><button class="edit-log-button" data-import>Import</button></div>
    <p class="edit-note" id="backupNote">Uninstalling the app or clearing its data erases your ratings, so export a backup first.</p>
   </div>`;
 }
@@ -631,7 +638,7 @@ function importBackup() {
 function parseBackup(text) {
  if(typeof text!=='string' || text.length>MAX_BACKUP_CHARS) return {error:'That file is too large to be a Barbook backup.'};
  let data;
- try { data=JSON.parse(text); } catch(e) { return {error:'That file is not a valid Barbook backup.'}; }
+ try { data=JSON.parse(text.replace(/^\uFEFF/,'')); } catch(e) { return {error:'That file is not a valid Barbook backup.'}; }
  if(!data || typeof data!=='object' || data.app!=='barbook' || !data.edits || typeof data.edits!=='object' || Array.isArray(data.edits)) return {error:'That file is not a valid Barbook backup.'};
  const map=cleanEdits(data.edits);
  const settings=data.settings && typeof data.settings==='object' ? data.settings : {};

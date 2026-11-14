@@ -43,11 +43,12 @@ java = JAVA.read_text(encoding="utf-8")
 
 # --- Meaningful catalogue sorting only.
 options = re.findall(r'<option\s+value="([^"]+)"', html)
-require(options == ["efficiency", "price20"], f"Expected exactly the two approved sort options; found {options!r}")
+require(options == ["efficiency", "price20", "rating"], f"Expected exactly the three approved sort options; found {options!r}")
 require("sortMode = 'efficiency'" in html, "Protein per 100 kcal must be the default sort")
 require("sortMode==='price20'" in html, "Price-per-20g sorting logic is missing")
 require("proteinEfficiency(b)-proteinEfficiency(a)" in html, "Efficiency sort must rank highest first")
 require("Protein / 100 kcal · high to low" in html and "₹ / 20g protein · low to high" in html, "Sort labels must read 'high to low' and 'low to high'")
+require("My rating · high to low" in html and "sortMode==='rating'" in html, "The My rating sort (rated bars first, unrated by protein per 100 kcal) is missing")
 require("highest first" not in html and "lowest first" not in html, "Sort labels must not say 'highest first' or 'lowest first'")
 
 # --- Direct-to-catalogue navigation and intentionally minimal UI.
@@ -60,6 +61,7 @@ require("Hide duplicate pack sizes" not in html and "unique-hint" not in html, "
 require("Prices and nutrition from your tracker sheet" not in html and "footer-note" not in html, "Redundant tracker footer note must stay removed")
 require("sort-helper" not in html and "Only meaningful comparisons" not in html, "The sort helper sentence must stay removed")
 require('data-action="theme"' not in html, "Dark mode lives only in Settings; do not put a theme button back in the header")
+require("everything stays on this phone" not in html and "System follows your phone" not in html, "Settings should stay terse: no version/privacy subtitle or theme explainer")
 require("serviceWorker" not in html, "The service-worker registration is dead code in the Android WebView; do not reintroduce it")
 
 # --- Local-only personal data and agreed rating controls.

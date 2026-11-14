@@ -16,7 +16,7 @@ Every release is signed with the same key, so a new version installs **over** th
 - Opens directly on **All bars**; bottom navigation is only **All bars** and **Tried**.
 - **Settings** (sliders icon, top right) has the theme (**Light**, **Dark** or **System**, which follows the phone) and **Export / Import ratings**.
 - A compact **Unique flavours** switch shows one entry per flavour: the variant you have tried (with its own rating), or if you have not tried any, the one with the highest protein per 100 kcal (the one that tops the default sort). A rating is never copied onto a different pack size. All bars only.
-- Sorting: protein per 100 kcal (default, high to low) and ₹ per 20g protein (low to high).
+- Sorting: protein per 100 kcal (default, high to low), ₹ per 20g protein (low to high), and your own rating (high to low; unrated bars follow, in protein-per-100-kcal order).
 - Marketplace price follows the selected filter; Any shows the lower price and where it is from.
 - Personal data is a tried/not-tried status and an optional rating from 1 to 10. Ratings 8–10 are green, 6–7 yellow, 1–5 red.
 - Personal data is stored only on the phone (`localStorage`, key `barbook-v1-personal-edits`). No cloud sync, accounts, analytics or uploads.
