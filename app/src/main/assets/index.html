@@ -7,7 +7,11 @@
   <script>
     /* Apply the saved theme before anything is painted so a dark-mode user never sees a light frame. */
     (function(){ var d=document.documentElement; d.className='preload';
-      try { if (localStorage.getItem('barbook-theme-v1')==='dark') d.dataset.theme='dark'; } catch(e) {} })();
+      try {
+        var p=localStorage.getItem('barbook-theme-v1');
+        var sysDark=window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+        if (p==='dark' || (p!=='light' && sysDark)) d.dataset.theme='dark';
+      } catch(e) {} })();
   </script>
   <meta name="description" content="A simple personal tracker for The Whole Truth protein bars.">
   <title>Barbook — The Whole Truth tracker</title>
@@ -171,6 +175,7 @@
     .toast { position:fixed; z-index:50; bottom:88px; left:50%; transform:translate(-50%,12px); opacity:0; pointer-events:none; background:#292536; color:white; padding:10px 15px; border-radius:999px; font-size:11px; font-weight:750; transition:opacity .38s ease, transform .38s cubic-bezier(.2,.7,.2,1); white-space:nowrap; }
     .toast.show { opacity:1; transform:translate(-50%,0); }
 
+    .edit-state.three { grid-template-columns:repeat(3,1fr); }
     .setting-row { display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:11px 13px; margin-bottom:7px; }
     .setting-row b { display:block; font-size:12px; font-weight:800; }
     .setting-row small { display:block; margin-top:3px; color:var(--muted); font-size:10px; line-height:1.4; }
@@ -329,7 +334,11 @@ let edits = {};
 try { edits = JSON.parse(storage.get(STORE_KEY) || '{}') || {}; } catch(e) { edits = {}; }
 if (typeof edits !== 'object' || Array.isArray(edits)) edits = {};
 let uniqueFlavoursOnly = storage.get(UNIQUE_KEY) === 'true';
-let currentTheme = storage.get(THEME_KEY) === 'dark' ? 'dark' : 'light';
+const systemDarkQuery = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+const normalizeThemePref = v => (v === 'light' || v === 'dark' || v === 'system') ? v : 'system';
+let themePref = normalizeThemePref(storage.get(THEME_KEY));
+const effectiveTheme = () => themePref === 'system' ? (systemDarkQuery && systemDarkQuery.matches ? 'dark' : 'light') : themePref;
+let currentTheme = effectiveTheme();
 let tab = 'browse', seriesFilter = 'All', availabilityFilter = 'Any', sortMode = 'efficiency', searchText = '';
 let activeBarId = null, settingsOpen = false, isEditing = false, editDraft = null;
 let confirmAction = null, pendingImport = null;
@@ -388,7 +397,7 @@ function filteredBars() {
    const key=b.flavor.trim().toLowerCase();
    const group=groups.get(key) || {representative:null, tasting:null};
    const old=group.representative;
-   if(!old || b.protein>old.protein || (b.protein===old.protein && b.cal<old.cal)) group.representative=b;
+   if(!old || proteinEfficiency(b)>proteinEfficiency(old) || (proteinEfficiency(b)===proteinEfficiency(old) && b.protein>old.protein)) group.representative=b;
    if(b.tried && b.rating!=null && (!group.tasting || Number(b.rating)>Number(group.tasting.rating))) group.tasting=b;
    else if(b.tried && !group.tasting) group.tasting=b;
    groups.set(key,group);
@@ -416,7 +425,7 @@ function browsePage() {
   ? `<div class="taste-hero"><div><div class="eyebrow">YOUR AVERAGE RATING</div><h2>${avgRating()} <span style="font-size:13px;color:#8b819c">/ 10</span></h2><p>${ratedBars().length} rated · ${triedBars().length} tried</p></div><div class="taste-score"><b>${triedBars().length}</b><span>TRIED</span></div></div><div class="taste-tip"><div class="tip-dot">✳</div><div>Tap a bar to change its tried status or rating. Saved on this phone.</div></div>`
   : `<div class="search-wrap">${svg('search')}<input id="searchInput" type="search" placeholder="Search a flavour or series…" value="${escapeHtml(searchText)}" autocomplete="off"></div>
    <div class="filter-row">${['All','PRO','Core','Millet','Mini'].map(s=>`<button class="filter-chip ${seriesFilter===s?'active':''}" data-series="${s}">${s}${s==='All'?'<span class="count">23</span>':''}</button>`).join('')}</div><div class="unique-row"><label class="unique-toggle"><input type="checkbox" id="uniqueFlavours" ${uniqueFlavoursOnly?'checked':''}><span class="switch"></span><span>Unique flavours</span></label></div>
-   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · highest first</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · lowest first</option></select></div>`;
+   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · high to low</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · low to high</option></select></div>`;
  return `<div class="page-title"><div class="eyebrow">${isTasted?'YOUR TRIED BARS':'THE FULL COLLECTION'}</div><h1>${isTasted?'Your tried bars.':'Protein bars, compared.'}</h1><p id="pageSummary">${summaryText(items.length)}</p></div>
   ${header}
   <div class="results-label"><span id="resultCount">${resultLabel(items.length)}</span><span>Tap a card for details ↗</span></div>
@@ -459,16 +468,22 @@ function switchTab(next) {
 
 /* Theme */
 function applyTheme() {
+ currentTheme = effectiveTheme();
  document.documentElement.dataset.theme = currentTheme;
- try { if (window.BarbookNative && window.BarbookNative.setTheme) window.BarbookNative.setTheme(currentTheme === 'dark'); } catch(e) {}
+ try { if (window.BarbookNative && window.BarbookNative.setThemeMode) window.BarbookNative.setThemeMode(themePref, currentTheme === 'dark'); } catch(e) {}
  const meta = $('meta[name="theme-color"]');
  if (meta) meta.content = currentTheme === 'dark' ? '#15141b' : '#f7f6f2';
- document.querySelectorAll('[data-theme-set]').forEach(el=>el.classList.toggle('active',el.dataset.themeSet===currentTheme));
+ document.querySelectorAll('[data-theme-set]').forEach(el=>el.classList.toggle('active',el.dataset.themeSet===themePref));
 }
 function setTheme(mode) {
- currentTheme = mode === 'dark' ? 'dark' : 'light';
- storage.set(THEME_KEY, currentTheme);
+ themePref = normalizeThemePref(mode);
+ storage.set(THEME_KEY, themePref);
  applyTheme();
+}
+if (systemDarkQuery) {
+ const onSystemThemeChange = () => { if (themePref === 'system') applyTheme(); };
+ if (systemDarkQuery.addEventListener) systemDarkQuery.addEventListener('change', onSystemThemeChange);
+ else if (systemDarkQuery.addListener) systemDarkQuery.addListener(onSystemThemeChange);
 }
 
 /* Bottom sheets (bar details and settings) share one shell. The entrance animation is only
@@ -574,7 +589,7 @@ function backupCounts(map) {
  return {total:list.length, tried:list.filter(e=>e.tried).length, rated:list.filter(e=>e.rating!=null).length};
 }
 function buildBackup() {
- return {app:'barbook', format:BACKUP_FORMAT, appVersion:APP_VERSION, exportedAt:new Date().toISOString(), edits:cleanEdits(edits), settings:{theme:currentTheme, uniqueFlavours:uniqueFlavoursOnly}};
+ return {app:'barbook', format:BACKUP_FORMAT, appVersion:APP_VERSION, exportedAt:new Date().toISOString(), edits:cleanEdits(edits), settings:{theme:themePref, uniqueFlavours:uniqueFlavoursOnly}};
 }
 function backupFileName() {
  const d=new Date(); const p=n=>String(n).padStart(2,'0');
@@ -584,7 +599,7 @@ function settingsInnerHtml() {
  const tried=triedBars().length, rated=ratedBars().length;
  return `<div class="sheet-handle"></div>
   <div class="sheet-top"><div class="sheet-title"><div><h2>Settings</h2><p>Barbook v${APP_VERSION} · everything stays on this phone</p></div></div><button class="close-button" data-close="button" aria-label="Close">×</button></div>
-  <div class="detail-section"><h3>Appearance</h3><div class="edit-state"><button class="edit-option ${currentTheme==='light'?'active':''}" data-theme-set="light">Light</button><button class="edit-option ${currentTheme==='dark'?'active':''}" data-theme-set="dark">Dark</button></div></div>
+  <div class="detail-section"><h3>Appearance</h3><div class="edit-state three">${[['light','Light'],['dark','Dark'],['system','System']].map(([id,label])=>`<button class="edit-option ${themePref===id?'active':''}" data-theme-set="${id}">${label}</button>`).join('')}</div><p class="edit-note">System follows your phone's light or dark setting.</p></div>
   <div class="detail-section"><h3>Backup</h3>
    <div class="setting-row"><div><b>Export ratings</b><small>${plural(tried,'tried bar')} · ${rated} rated. Saves a file you can keep.</small></div><button class="edit-log-button" data-export>Export</button></div>
    <div class="setting-row"><div><b>Import ratings</b><small>Replace current ratings with a Barbook backup file.</small></div><button class="edit-log-button" data-import>Import</button></div>
@@ -624,7 +639,7 @@ function parseBackup(text) {
 }
 function applyImport(result) {
  edits=result.edits; persist();
- if(result.settings.theme==='light' || result.settings.theme==='dark') setTheme(result.settings.theme);
+ if(['light','dark','system'].includes(result.settings.theme)) setTheme(result.settings.theme);
  if(typeof result.settings.uniqueFlavours==='boolean'){ uniqueFlavoursOnly=result.settings.uniqueFlavours; storage.set(UNIQUE_KEY,String(uniqueFlavoursOnly)); }
  renderMain(); refreshSettings(); applyTheme();
  toast('Backup restored');

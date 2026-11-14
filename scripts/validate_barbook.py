@@ -47,6 +47,8 @@ require(options == ["efficiency", "price20"], f"Expected exactly the two approve
 require("sortMode = 'efficiency'" in html, "Protein per 100 kcal must be the default sort")
 require("sortMode==='price20'" in html, "Price-per-20g sorting logic is missing")
 require("proteinEfficiency(b)-proteinEfficiency(a)" in html, "Efficiency sort must rank highest first")
+require("Protein / 100 kcal · high to low" in html and "₹ / 20g protein · low to high" in html, "Sort labels must read 'high to low' and 'low to high'")
+require("highest first" not in html and "lowest first" not in html, "Sort labels must not say 'highest first' or 'lowest first'")
 
 # --- Direct-to-catalogue navigation and intentionally minimal UI.
 require("tab = 'browse'" in html, "App must open directly on All bars")
@@ -70,6 +72,7 @@ require("ratingTone = score => Number(score) >= 8 ? 'rating-good' : (Number(scor
 require("availabilityFilter==='Blinkit'" in html and "availabilityFilter==='Website'" in html, "Marketplace-specific prices are missing")
 require("<textarea" not in html.lower() and "tasting notes" not in html.lower(), "Free-text tasting notes are outside the agreed scope")
 require('flavor:"Hazelnut Cocoa",series:"PRO"' in html and "tried:true,rating:6" in html, "Hazelnut Cocoa should be seeded as tried with a 6/10 rating")
+require("proteinEfficiency(b)>proteinEfficiency(old)" in html, "Unique flavours must keep the variant with the highest protein per 100 kcal")
 require("group.tasting.rating" in html and "group.representative" in html, "Unique-flavour view must carry tasting status from matching pack variants")
 require(len(re.findall(r"\{id:\d+,flavor:", html)) == 23, "The catalogue should contain exactly 23 bars unless a data change was requested")
 
@@ -78,6 +81,12 @@ require("var(--nav-line)" in html and "rgba(225,222,216,.8)" not in re.search(r"
         "The bottom bar border must use the themed --nav-line variable (a fixed light colour shows as a white line in dark mode)")
 require("html.preload" in html and "localStorage.getItem('barbook-theme-v1')" in html.split("</head>")[0], "The saved theme must be applied in <head> before first paint")
 require("getSharedPreferences" in java and "onResume" in java and "setBackgroundDrawable" in java, "MainActivity must remember the theme and apply it at start and resume (prevents a white flash in dark mode)")
+
+# --- Theme: Light, Dark or System.
+require(all(f'data-theme-set="${{id}}"' in html or id in html for id in ("light", "dark", "system")) and "[['light','Light'],['dark','Dark'],['system','System']]" in html, "Settings must offer Light, Dark and System themes")
+require("prefers-color-scheme: dark" in html and "normalizeThemePref" in html, "The System theme must follow the phone's colour scheme")
+require("setThemeMode" in java and "uiMode" in (ROOT / "app/src/main/AndroidManifest.xml").read_text(encoding="utf-8"), "MainActivity must resolve the System theme and handle uiMode changes")
+require((ROOT / "app/src/main/res/values-night/styles.xml").exists(), "values-night/styles.xml is needed so the start-up window is dark when the phone is dark")
 
 # --- Settings, export and import.
 require("data-export" in html and "data-import" in html, "Settings must offer Export and Import")

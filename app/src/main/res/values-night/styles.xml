@@ -1,0 +1,13 @@
+<resources>
+    <!-- Used when the phone itself is in dark mode, so the window Android shows while the app starts
+         is dark too (otherwise a light frame flashes before the page loads). -->
+    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#C2B4E8</item>
+        <item name="android:statusBarColor">#15141B</item>
+        <item name="android:navigationBarColor">#15141B</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">#15141B</item>
+    </style>
+</resources>

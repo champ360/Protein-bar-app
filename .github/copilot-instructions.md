@@ -9,7 +9,7 @@
 - Catalogue sorting must contain exactly two options: protein per 100 kcal (default, descending) and ₹ per 20g protein (ascending). Do not reintroduce raw price, raw calories, or raw protein sorting.
 - Marketplace price display must follow the selected marketplace filter. In Any, show the lower available price and identify its source.
 - Navigation: open directly to All bars; bottom navigation is only All bars and Tried. Settings opens from the header icon as a sheet. Do not reintroduce Home or an inert header search shortcut. Remove redundant tracker-sheet footer notes.
-- Keep light/dark mode, Save/Discard editing, the compact Unique flavours switch, and Settings export/import working.
+- Keep the Light/Dark/System theme choice (default System), Save/Discard editing, the compact Unique flavours switch, and Settings export/import working. Dark mode is set only in Settings, not in the header. The Unique flavours switch keeps the variant with the highest protein per 100 kcal per flavour. Sort labels read "high to low" / "low to high".
 - Rating colours: 8–10 green, 6–7 yellow, 1–5 red.
 - Rendering rule (prevents screen flashing): build the page shell once, then update only what changed. Never replace an open sheet or re-render the whole page for an ordinary tap. Entrance animations belong only on the `.enter` class used when a sheet first opens. Support `prefers-reduced-motion`; keep motion understated.
 - Keep the product catalogue data unchanged unless the task explicitly requests a data correction.
