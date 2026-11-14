@@ -1,4 +1,4 @@
-# Barbook v1.6
+# Barbook v1.7
 
 A lightweight, offline-first Android tracker for The Whole Truth protein bars.
 
