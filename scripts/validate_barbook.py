@@ -73,7 +73,7 @@ require("availabilityFilter==='Blinkit'" in html and "availabilityFilter==='Webs
 require("<textarea" not in html.lower() and "tasting notes" not in html.lower(), "Free-text tasting notes are outside the agreed scope")
 require('flavor:"Hazelnut Cocoa",series:"PRO"' in html and "tried:true,rating:6" in html, "Hazelnut Cocoa should be seeded as tried with a 6/10 rating")
 require("proteinEfficiency(b)>proteinEfficiency(old)" in html, "Unique flavours must keep the variant with the highest protein per 100 kcal")
-require("group.tasting.rating" in html and "group.representative" in html, "Unique-flavour view must carry tasting status from matching pack variants")
+require("group.tasting || group.representative" in html and "tried:true,rating:group.tasting.rating" not in html, "Unique-flavour view must show the tried variant as it is, or the best protein per 100 kcal, and never copy a rating onto another variant")
 require(len(re.findall(r"\{id:\d+,flavor:", html)) == 23, "The catalogue should contain exactly 23 bars unless a data change was requested")
 
 # --- Dark mode: no light flash, no light line.

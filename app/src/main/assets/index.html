@@ -318,7 +318,7 @@ const BARS = [
  {id:23,flavor:"Cranberry Raisin",series:"Mini",protein:6,blinkit:true,website:true,bPrice:71,wPrice:66,b20:237,w20:220,cal:122,density:4.92,tried:false,rating:null}
 ];
 
-const APP_VERSION = '1.5';
+const APP_VERSION = '1.6';
 const STORE_KEY = 'barbook-v1-personal-edits';
 const UNIQUE_KEY = 'barbook-unique-flavours-v1';
 const THEME_KEY = 'barbook-theme-v1';
@@ -402,9 +402,9 @@ function filteredBars() {
    else if(b.tried && !group.tasting) group.tasting=b;
    groups.set(key,group);
   });
-  list=[...groups.values()].map(group=>group.tasting
-   ? {...group.representative,tried:true,rating:group.tasting.rating}
-   : group.representative);
+  // Show the variant you tried (as it really is, with its own rating); otherwise the best protein per 100 kcal.
+  // A status or rating is never copied onto a different pack size of the same flavour.
+  list=[...groups.values()].map(group=>group.tasting || group.representative);
  }
  list.sort((a,b)=>{
   if(sortMode==='price20') return (bestPrice20(a)?.value ?? Infinity)-(bestPrice20(b)?.value ?? Infinity) || proteinEfficiency(b)-proteinEfficiency(a);
