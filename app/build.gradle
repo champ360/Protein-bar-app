@@ -2,6 +2,13 @@ plugins {
     id 'com.android.application'
 }
 
+// One fixed signing key for every build, so each new APK installs as an update over the last one
+// (and your saved ratings survive). This key lives in the repo on purpose: Barbook is a personal
+// sideloaded app, not a Play Store release. To use a private key instead, set the BARBOOK_*
+// environment variables below (for example from GitHub Actions secrets); no code change is needed.
+// Changing the key means Android treats the APK as a different app, so everyone has to uninstall first.
+def signingStoreFile = System.getenv('BARBOOK_KEYSTORE') ?: "${rootProject.projectDir}/signing/barbook.keystore"
+
 android {
     namespace 'com.barbook.wholetruth'
     compileSdk 35
@@ -10,8 +17,32 @@ android {
         applicationId 'com.barbook.wholetruth'
         minSdk 23
         targetSdk 34
-        versionCode 5
-        versionName '1.4'
+        versionCode 6
+        versionName '1.5'
+    }
+
+    signingConfigs {
+        barbook {
+            storeFile file(signingStoreFile)
+            storePassword System.getenv('BARBOOK_KEYSTORE_PASSWORD') ?: 'tTz17Cy3zTjC54MPbP6tiSqE'
+            keyAlias System.getenv('BARBOOK_KEY_ALIAS') ?: 'barbook'
+            keyPassword System.getenv('BARBOOK_KEY_PASSWORD') ?: 'tTz17Cy3zTjC54MPbP6tiSqE'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.barbook
+        }
+        release {
+            signingConfig signingConfigs.barbook
+            minifyEnabled false
+        }
+    }
+
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
     }
 
     compileOptions {

@@ -1,15 +1,13 @@
 name: Release Barbook
 
+# Publishes a GitHub release (signed APK + project zip) whenever the version in app/build.gradle
+# changes on main. It can also be started by hand from the Actions tab to rebuild the current version.
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ main, master ]
+    paths:
+      - 'app/build.gradle'
   workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Release tag to create, e.g. v1.4'
-        required: true
-        default: 'v1.4'
 
 permissions:
   contents: write
@@ -21,43 +19,86 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v4
 
+      - name: Read version
+        id: version
+        run: |
+          NAME=$(grep -oP "versionName\s+'\K[^']+" app/build.gradle)
+          if [ -z "$NAME" ]; then echo "Could not read versionName"; exit 1; fi
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "tag=v$NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if this version is already released
+        id: existing
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "Release ${{ steps.version.outputs.tag }} already exists; nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Node.js
+        if: steps.existing.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Set up Python
+        if: steps.existing.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Validate Barbook requirements
+        if: steps.existing.outputs.skip != 'true'
         run: python scripts/validate_barbook.py
 
       - name: Set up Java 17
+        if: steps.existing.outputs.skip != 'true'
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Android SDK
+        if: steps.existing.outputs.skip != 'true'
         uses: android-actions/setup-android@v4
 
       - name: Set up Gradle
+        if: steps.existing.outputs.skip != 'true'
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Build Barbook APK
-        run: gradle --no-daemon :app:assembleDebug
+      - name: Build signed APK
+        if: steps.existing.outputs.skip != 'true'
+        run: gradle --no-daemon :app:assembleRelease
+
+      - name: Check APK signature
+        if: steps.existing.outputs.skip != 'true'
+        run: |
+          APKSIGNER=$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -name apksigner | sort -V | tail -n 1)
+          "$APKSIGNER" verify --print-certs app/build/outputs/apk/release/app-release.apk
 
       - name: Package release files
+        if: steps.existing.outputs.skip != 'true'
         run: |
-          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          TAG="${{ steps.version.outputs.tag }}"
           mkdir -p dist
-          cp app/build/outputs/apk/debug/app-debug.apk "dist/Barbook-${TAG}-debug.apk"
-          zip -r "dist/Barbook-${TAG}-Android-Project.zip" . \
-            -x ".git/*" "dist/*" "**/build/*" ".gradle/*" "local.properties"
+          cp app/build/outputs/apk/release/app-release.apk "dist/Barbook-${TAG}.apk"
+          git archive --format=zip --prefix="Barbook-${TAG}-Android-Project/" -o "dist/Barbook-${TAG}-Android-Project.zip" HEAD
 
       - name: Publish GitHub release
+        if: steps.existing.outputs.skip != 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          tag_name: ${{ steps.version.outputs.tag }}
           target_commitish: ${{ github.sha }}
+          name: Barbook ${{ steps.version.outputs.tag }}
           files: dist/*
           generate_release_notes: true
+          body: |
+            Install: download `Barbook-${{ steps.version.outputs.tag }}.apk` below and open it on your phone.
+
+            This build is signed with the repository's fixed signing key, so later releases install over this one and keep your ratings. If your phone says the app conflicts with an existing package, it was installed from an older build signed with a different key: export your ratings first if you can, uninstall the old app once, then install this one.

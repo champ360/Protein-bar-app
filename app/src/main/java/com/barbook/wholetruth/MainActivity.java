@@ -1,7 +1,10 @@
 package com.barbook.wholetruth;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -10,8 +13,21 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
 public class MainActivity extends Activity {
+    private static final int REQUEST_EXPORT = 4101;
+    private static final int REQUEST_IMPORT = 4102;
+    private static final int MAX_BACKUP_BYTES = 1000000;
+
     private WebView webView;
+    private String pendingExport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +46,7 @@ public class MainActivity extends Activity {
         settings.setDatabaseEnabled(true);
         settings.setDefaultTextEncodingName("UTF-8");
 
-        webView.addJavascriptInterface(new ThemeBridge(), "BarbookNative");
+        webView.addJavascriptInterface(new NativeBridge(), "BarbookNative");
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
         setContentView(webView);
@@ -46,10 +62,90 @@ public class MainActivity extends Activity {
         if (webView != null) webView.setBackgroundColor(barColor);
     }
 
-    private final class ThemeBridge {
+    /** Runs a JavaScript call on the page. Must be called on the UI thread. */
+    private void callJs(String script) {
+        if (webView != null) webView.evaluateJavascript(script, null);
+    }
+
+    /** Methods exposed to the page as window.BarbookNative. They run on a background thread. */
+    private final class NativeBridge {
         @JavascriptInterface
         public void setTheme(boolean dark) {
             runOnUiThread(() -> updateSystemBars(dark));
+        }
+
+        @JavascriptInterface
+        public void saveBackup(String fileName, String json) {
+            runOnUiThread(() -> {
+                pendingExport = json;
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/json");
+                intent.putExtra(Intent.EXTRA_TITLE, fileName);
+                try {
+                    startActivityForResult(intent, REQUEST_EXPORT);
+                } catch (ActivityNotFoundException e) {
+                    pendingExport = null;
+                    callJs("onBackupError(" + JSONObject.quote("No file manager is available on this phone.") + ")");
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void pickBackup() {
+            runOnUiThread(() -> {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                try {
+                    startActivityForResult(intent, REQUEST_IMPORT);
+                } catch (ActivityNotFoundException e) {
+                    callJs("onBackupError(" + JSONObject.quote("No file manager is available on this phone.") + ")");
+                }
+            });
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EXPORT) {
+            String json = pendingExport;
+            pendingExport = null;
+            Uri uri = (resultCode == RESULT_OK && data != null) ? data.getData() : null;
+            if (uri == null || json == null) {
+                callJs("onBackupSaved(false)");
+                return;
+            }
+            try (OutputStream out = getContentResolver().openOutputStream(uri, "wt")) {
+                if (out == null) throw new IOException("No output stream");
+                out.write(json.getBytes(StandardCharsets.UTF_8));
+                out.flush();
+                callJs("onBackupSaved(true)");
+            } catch (IOException | RuntimeException e) {
+                callJs("onBackupError(" + JSONObject.quote("Could not save the backup file.") + ")");
+            }
+        } else if (requestCode == REQUEST_IMPORT) {
+            Uri uri = (resultCode == RESULT_OK && data != null) ? data.getData() : null;
+            if (uri == null) return;
+            try (InputStream in = getContentResolver().openInputStream(uri)) {
+                if (in == null) throw new IOException("No input stream");
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                byte[] chunk = new byte[8192];
+                int read;
+                while ((read = in.read(chunk)) != -1) {
+                    buffer.write(chunk, 0, read);
+                    if (buffer.size() > MAX_BACKUP_BYTES) {
+                        callJs("onBackupError(" + JSONObject.quote("That file is too large to be a Barbook backup.") + ")");
+                        return;
+                    }
+                }
+                String text = new String(buffer.toByteArray(), StandardCharsets.UTF_8);
+                callJs("onBackupPicked(" + JSONObject.quote(text) + ")");
+            } catch (IOException | RuntimeException e) {
+                callJs("onBackupError(" + JSONObject.quote("Could not read that file.") + ")");
+            }
         }
     }
 

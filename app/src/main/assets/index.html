@@ -10,7 +10,6 @@
     :root {
       color-scheme: light;
       --paper: #f7f6f2;
-      --white: #ffffff;
       --surface: #ffffff;
       --surface-2: #eeece7;
       --surface-3: #f5f2f8;
@@ -22,13 +21,9 @@
       --plum: #49415f;
       --plum-dark: #292536;
       --lavender: #eeeaf7;
-      --lavender-deep: #dcd3ef;
       --lime: #dafa66;
-      --peach: #f6e9dd;
-      --green: #dcefe4;
       --nav-surface: rgba(255,255,255,.94);
       --shadow: 0 12px 34px rgba(43, 37, 54, .07);
-      --radius: 22px;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html { min-height: 100%; background: var(--paper); }
@@ -54,36 +49,10 @@
     .icon-button { height: 40px; width: 40px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); display:grid; place-items:center; color:var(--plum); transition:background-color .38s ease, border-color .38s ease, color .38s ease, transform .38s cubic-bezier(.2,.7,.2,1); }
     .icon-button:active { transform:translateY(1px); }
     .icon-button svg { width:18px; height:18px; }
-    main { animation: appear .48s cubic-bezier(.22,.68,.22,1) both; }
-    @keyframes appear { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
     .eyebrow { color: #8d8799; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; }
-    .hero {
       position: relative; overflow: hidden; border-radius: 27px; background: var(--plum-dark); color: white;
       min-height: 205px; padding: 24px 23px; box-shadow: 0 15px 30px rgba(44,39,58,.13);
     }
-    .hero .eyebrow { color: #c9c2d9; }
-    .hero h1 { margin: 13px 0 8px; max-width: 290px; font-size: clamp(28px, 7vw, 35px); line-height: 1.04; font-weight: 820; letter-spacing: -.055em; }
-    .hero p { color: #d5d1dd; margin: 0; font-size: 12px; line-height: 1.55; max-width: 250px; }
-    .hero-cta { margin-top: 17px; display: inline-flex; align-items: center; gap: 8px; border: 0; background: var(--lime); color: #2b2930; border-radius: 999px; padding: 10px 14px; font-size: 11px; font-weight: 850; }
-    .hero-cta svg { width: 13px; height: 13px; }
-    .hero-art { position:absolute; right: 18px; top: 25px; width: 130px; height: 150px; opacity: .96; }
-    .orbit { position:absolute; width: 118px; height:118px; right: -1px; top: 14px; border: 1px solid rgba(255,255,255,.16); border-radius:50%; }
-    .orbit:after { content:""; position:absolute; inset:12px; border:1px dashed rgba(255,255,255,.17); border-radius:50%; }
-    .bar-shape { position:absolute; width: 87px; height: 35px; border-radius: 12px; background: var(--lime); right: 8px; transform: rotate(-35deg); box-shadow: 0 10px 15px rgba(0,0,0,.17); }
-    .bar-shape:after { content:""; position:absolute; left: 12px; right: 12px; top: 9px; height: 17px; border-radius: 7px; border: 1px solid rgba(41,37,54,.28); }
-    .bar-shape.one { top: 41px; right: 10px; }
-    .bar-shape.two { top: 78px; right: 29px; background: #c7b8e4; transform:rotate(-35deg) scale(.88); }
-    .bar-shape.three { top: 111px; right: 5px; background: #f1d9bd; transform:rotate(-35deg) scale(.72); }
-    .hero-sticker { position:absolute; right: 1px; bottom: 0; width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--plum); display:grid; place-items:center; font-size:9px; line-height:1.1; font-weight:900; text-align:center; transform:rotate(10deg); box-shadow: var(--shadow); }
-    .section-head { display:flex; justify-content:space-between; align-items:end; gap:10px; margin: 25px 1px 13px; }
-    .section-head h2 { margin: 0; font-size: 18px; letter-spacing: -.045em; font-weight: 820; }
-    .text-link { border:0; background:transparent; color:var(--plum); font-size:11px; font-weight:850; padding:5px 0; }
-    .stats { display:grid; grid-template-columns: repeat(3,1fr); gap:9px; margin-top:14px; }
-    .stat { min-height:77px; background:var(--surface); border:1px solid var(--line); border-radius:17px; padding:13px 12px; }
-    .stat strong { display:block; font-size:22px; letter-spacing:-.06em; line-height:1.1; font-weight:850; }
-    .stat span { display:block; color:var(--muted); font-size:10px; font-weight:700; margin-top:6px; }
-    .stat .stat-dot { display:inline-block; vertical-align:2px; width:6px; height:6px; border-radius:50%; background:var(--lime); margin-right:5px; }
-    .spotlight { color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:21px; padding:15px; display:flex; gap:13px; align-items:center; box-shadow:0 5px 18px rgba(43,37,54,.035); }
     .mini-art { flex:0 0 64px; height:70px; border-radius:17px; display:grid; place-items:center; position:relative; overflow:hidden; background:var(--lavender); }
     .mini-art:before { content:""; height:39px; width:48px; border-radius:13px; background:var(--art,#c9b8e8); transform:rotate(-22deg); box-shadow:0 6px 10px rgba(54,45,75,.12); }
     .mini-art:after { content:""; position:absolute; width:33px; height:12px; border:1px solid rgba(48,40,65,.25); border-radius:6px; transform:rotate(-22deg); }
@@ -91,8 +60,6 @@
     .mini-art.core { --art:#c8b8e8; background:#f0ebf9; }
     .mini-art.millet { --art:#edc99c; background:#f8f0e6; }
     .mini-art.mini { --art:#eab9c8; background:#f8edf0; }
-    .spotlight-copy { min-width:0; flex:1; }
-    .spotlight-copy .meta { display:flex; align-items:center; gap:7px; margin-bottom:5px; }
     .tag { display:inline-flex; align-items:center; padding:4px 7px; border-radius:999px; color:#5d526e; background:var(--lavender); font-size:9px; line-height:1; letter-spacing:.08em; font-weight:850; }
     .tag.tried { background:#e1f1e7; color:#47785e; letter-spacing:0; }
     .tag.tried.rating-good, .read-only-log span.rating-good { background:#dff2e5; color:#286742; }
@@ -101,11 +68,6 @@
     .rating-buttons button.active.rating-good { background:#dff2e5; border-color:#a9d8b8; color:#286742; }
     .rating-buttons button.active.rating-mid { background:#fff0c9; border-color:#e8d18b; color:#7d5b10; }
     .rating-buttons button.active.rating-low { background:#f9e0df; border-color:#e6b5b2; color:#963b38; }
-    .spotlight h3 { margin:0; font-size:15px; font-weight:820; letter-spacing:-.035em; }
-    .spotlight p { margin:5px 0 0; font-size:10px; color:var(--muted); }
-    .spotlight-side { text-align:right; flex:0 0 auto; }
-    .spotlight-side b { display:block; font-size:16px; letter-spacing:-.04em; }
-    .spotlight-side small { display:block; margin-top:4px; color:var(--muted); font-size:9px; }
     .page-title { padding: 9px 1px 16px; }
     .page-title h1 { margin:7px 0 5px; font-size:29px; line-height:1.06; font-weight:850; letter-spacing:-.06em; }
     .page-title p { color:var(--muted); margin:0; font-size:12px; }
@@ -137,8 +99,6 @@
     .bar-card { width:100%; text-align:left; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:19px; display:flex; align-items:center; gap:12px; padding:12px; min-width:0; transition:transform .38s cubic-bezier(.2,.7,.2,1), box-shadow .38s ease, background-color .38s ease, border-color .38s ease; }
     .bar-card:active { transform:translateY(1px); }
     .bar-card:focus-visible, .icon-button:focus-visible, .nav-item:focus-visible, button:focus-visible, select:focus-visible { outline:2px solid var(--plum); outline-offset:3px; }
-    .bar-list { transition:opacity .34s ease, transform .34s cubic-bezier(.2,.7,.2,1); }
-    .bar-list.is-updating { opacity:.68; transform:translateY(2px); }
     .bar-card .mini-art { width:58px; height:62px; flex-basis:58px; border-radius:15px; }
     .bar-card .mini-art:before { width:43px; height:33px; }
     .bar-info { flex:1; min-width:0; }
@@ -171,9 +131,10 @@
     .nav-item.active { color:var(--plum); }
     .nav-item.active svg { background:var(--lavender); box-sizing:content-box; padding:6px 15px; width:19px; height:19px; border-radius:13px; }
     .modal-backdrop { position:fixed; inset:0; z-index:30; display:flex; align-items:flex-end; justify-content:center; background:rgba(35,31,43,.42); backdrop-filter:blur(4px); padding:12px 10px 0; }
-    .sheet { width:min(100%,600px); max-height:90vh; overflow:auto; background:var(--paper); border-radius:27px 27px 0 0; padding:11px 20px calc(24px + env(safe-area-inset-bottom)); box-shadow:0 -12px 45px rgba(28,24,37,.18); animation:sheetin .46s cubic-bezier(.2,.7,.2,1) both; }
+    .sheet { width:min(100%,600px); max-height:90vh; overflow:auto; background:var(--paper); border-radius:27px 27px 0 0; padding:11px 20px calc(24px + env(safe-area-inset-bottom)); box-shadow:0 -12px 45px rgba(28,24,37,.18); }
+    .sheet.enter { animation:sheetin .34s cubic-bezier(.2,.7,.2,1) both; }
     @keyframes sheetin { from { transform:translateY(24px); opacity:0; } to { transform:none; opacity:1; } }
-    .modal-backdrop { animation:backdropin .38s ease both; }
+    .modal-backdrop.enter { animation:backdropin .3s ease both; }
     @keyframes backdropin { from { opacity:0; } to { opacity:1; } }
     .sheet-handle { width:37px; height:4px; border-radius:8px; background:#d6d2d9; margin:0 auto 14px; }
     .sheet-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
@@ -198,15 +159,16 @@
     .tasting-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
     .tasting-head b { font-size:12px; }
     .tasting-head span { color:#746b85; font-size:10px; }
-    .toggle-button { margin-top:12px; width:100%; height:39px; border:1px solid #c8bddc; color:var(--plum); background:var(--surface); border-radius:12px; font-size:11px; font-weight:850; }
-    .rating-wrap { margin-top:13px; }
-    .rating-label { color:#766e84; font-size:10px; font-weight:800; margin-bottom:8px; }
     .rating-buttons { display:grid; grid-template-columns:repeat(10,1fr); gap:4px; }
     .rating-buttons button { min-width:0; height:29px; border-radius:8px; border:1px solid #d9d1e9; background:rgba(255,255,255,.75); color:#786f88; font-size:10px; font-weight:800; padding:0; }
     .rating-buttons button.active { background:var(--plum); border-color:var(--plum); color:#fff; }
     .toast { position:fixed; z-index:50; bottom:88px; left:50%; transform:translate(-50%,12px); opacity:0; pointer-events:none; background:#292536; color:white; padding:10px 15px; border-radius:999px; font-size:11px; font-weight:750; transition:opacity .38s ease, transform .38s cubic-bezier(.2,.7,.2,1); white-space:nowrap; }
     .toast.show { opacity:1; transform:translate(-50%,0); }
 
+    .setting-row { display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:11px 13px; margin-bottom:7px; }
+    .setting-row b { display:block; font-size:12px; font-weight:800; }
+    .setting-row small { display:block; margin-top:3px; color:var(--muted); font-size:10px; line-height:1.4; }
+    .top-actions .icon-button + .icon-button { margin-left:0; }
     .read-only-log { margin-top:11px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .read-only-log span { color:var(--muted); font-size:10px; line-height:1.4; }
     .read-only-log span.rating-good, .read-only-log span.rating-mid, .read-only-log span.rating-low { display:inline-flex; align-items:center; padding:6px 9px; border-radius:999px; font-weight:750; }
@@ -215,7 +177,6 @@
     .edit-note { margin:8px 0 12px; color:var(--muted); font-size:10px; line-height:1.45; }
     .edit-state { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
     .edit-option { min-height:39px; border:1px solid var(--line); background:var(--surface); color:var(--muted); }
-    .edit-option.active { background:var(--plum); border-color:var(--plum); color:#fff; }
     .edit-option.active { background:var(--plum); border-color:var(--plum); color:#fff; }
     .edit-rating-title { font-size:10px; font-weight:850; color:var(--ink-soft); margin:14px 0 8px; }
     .edit-actions { display:grid; grid-template-columns:1fr 1.2fr; gap:8px; margin-top:16px; }
@@ -232,11 +193,9 @@
     .confirm-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:17px; }
     .confirm-button { min-height:40px; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); }
     .confirm-button.danger { background:var(--plum-dark); border-color:var(--plum-dark); color:#fff; }
-    .confirm-button.danger { background:var(--plum-dark); border-color:var(--plum-dark); color:#fff; }
     :root[data-theme="dark"] {
       color-scheme:dark;
       --paper:#15141b;
-      --white:#211f2a;
       --surface:#211f2a;
       --surface-2:#2a2734;
       --surface-3:#302c3d;
@@ -248,14 +207,11 @@
       --plum:#c2b4e8;
       --plum-dark:#242130;
       --lavender:#302b40;
-      --lavender-deep:#4b415e;
       --nav-surface:rgba(29,27,37,.95);
       --shadow:0 14px 38px rgba(0,0,0,.24);
     }
     :root[data-theme="dark"] body { background:var(--paper); color:var(--ink); }
     :root[data-theme="dark"] .icon-button,
-    :root[data-theme="dark"] .stat,
-    :root[data-theme="dark"] .spotlight,
     :root[data-theme="dark"] .search-wrap input,
     :root[data-theme="dark"] .filter-chip,
     :root[data-theme="dark"] .sort-select,
@@ -265,8 +221,8 @@
     :root[data-theme="dark"] .taste-score,
     :root[data-theme="dark"] .sheet-stat,
     :root[data-theme="dark"] .price-row,
+    :root[data-theme="dark"] .setting-row,
     :root[data-theme="dark"] .close-button,
-    :root[data-theme="dark"] .toggle-button,
     :root[data-theme="dark"] .rating-buttons button,
     :root[data-theme="dark"] .edit-log-button,
     :root[data-theme="dark"] .edit-option,
@@ -284,7 +240,6 @@
     :root[data-theme="dark"] .taste-tip,
     :root[data-theme="dark"] .empty,
     :root[data-theme="dark"] .tasting-head span,
-    :root[data-theme="dark"] .rating-label,
     :root[data-theme="dark"] .edit-rating-title { color:var(--ink-soft); }
     :root[data-theme="dark"] .tag { color:#e2d9f3; background:#39334a; }
     :root[data-theme="dark"] .tag.tried { background:#244333; color:#a9dfbd; }
@@ -293,8 +248,6 @@
     :root[data-theme="dark"] .nav-item { color:#9c96a8; }
     :root[data-theme="dark"] .nav-item.active { color:var(--plum); }
     :root[data-theme="dark"] .nav-item.active svg { background:var(--surface-3); }
-    :root[data-theme="dark"] .hero .eyebrow { color:#d0c7e2; }
-    :root[data-theme="dark"] .hero p { color:#e0dce8; }
     :root[data-theme="dark"] .sheet-handle { background:#544e60; }
     :root[data-theme="dark"] .rating-buttons button.active { background:var(--plum); border-color:var(--plum); color:#201c2a; }
     :root[data-theme="dark"] .tag.tried.rating-good, :root[data-theme="dark"] .read-only-log span.rating-good,
@@ -305,22 +258,17 @@
     :root[data-theme="dark"] .rating-buttons button.active.rating-low { background:#4a2929; border-color:#744141; color:#f2b4b0; }
     :root[data-theme="dark"] .save-button,
     :root[data-theme="dark"] .confirm-button.danger { background:var(--plum); border-color:var(--plum); color:#201c2a; }
-    :root[data-theme="dark"] .hero-sticker { background:#f6f3fb; color:#49415f; }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
     }
 
     @media (min-width:560px) {
       .app { padding-left:25px; padding-right:25px; }
-      .hero { min-height:220px; padding:28px; }
-      .hero-art { transform:scale(1.15); transform-origin:right center; right:34px; }
       .bar-list.gridish { grid-template-columns:1fr 1fr; }
       .bar-card { min-height:94px; }
     }
     @media (max-width:360px) {
       .app { padding-left:14px; padding-right:14px; }
-      .hero-art { right:-18px; opacity:.75; transform:scale(.86); transform-origin:right center; }
-      .hero h1 { max-width:245px; font-size:28px; }
       .availability-tabs button { padding-left:7px; padding-right:7px; }
     }
   </style>
@@ -330,6 +278,7 @@
 <div class="bottom-nav" id="bottomNav"></div>
 <div id="modalRoot"></div>
 <div class="toast" id="toast"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
 <script>
 const BARS = [
  {id:1,flavor:"Double Cocoa",series:"PRO",protein:20,blinkit:true,website:true,bPrice:168,wPrice:159,b20:168,w20:159,cal:336,density:5.95,tried:true,rating:9},
@@ -356,21 +305,32 @@ const BARS = [
  {id:22,flavor:"Coffee Cocoa",series:"Mini",protein:6,blinkit:true,website:true,bPrice:71,wPrice:66,b20:237,w20:220,cal:128,density:4.69,tried:false,rating:null},
  {id:23,flavor:"Cranberry Raisin",series:"Mini",protein:6,blinkit:true,website:true,bPrice:71,wPrice:66,b20:237,w20:220,cal:122,density:4.92,tried:false,rating:null}
 ];
+
+const APP_VERSION = '1.5';
 const STORE_KEY = 'barbook-v1-personal-edits';
-let edits = {};
-try { edits = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch(e) { edits = {}; }
 const UNIQUE_KEY = 'barbook-unique-flavours-v1';
-let uniqueFlavoursOnly = false;
-try { uniqueFlavoursOnly = localStorage.getItem(UNIQUE_KEY) === 'true'; } catch(e) {}
-let tab = 'browse', seriesFilter = 'All', availabilityFilter = 'Any', sortMode = 'efficiency', searchText = '', activeBarId = null;
-let isEditing = false, editDraft = null;
 const THEME_KEY = 'barbook-theme-v1';
-let currentTheme = 'light';
-try { currentTheme = localStorage.getItem(THEME_KEY) || 'light'; } catch(e) {}
-if (currentTheme !== 'dark') currentTheme = 'light';
+const BACKUP_FORMAT = 1;
+const MAX_BACKUP_CHARS = 1000000;
+
+const storage = {
+ get(key) { try { return localStorage.getItem(key); } catch(e) { return null; } },
+ set(key, value) { try { localStorage.setItem(key, value); } catch(e) {} }
+};
+
+let edits = {};
+try { edits = JSON.parse(storage.get(STORE_KEY) || '{}') || {}; } catch(e) { edits = {}; }
+if (typeof edits !== 'object' || Array.isArray(edits)) edits = {};
+let uniqueFlavoursOnly = storage.get(UNIQUE_KEY) === 'true';
+let currentTheme = storage.get(THEME_KEY) === 'dark' ? 'dark' : 'light';
+let tab = 'browse', seriesFilter = 'All', availabilityFilter = 'Any', sortMode = 'efficiency', searchText = '';
+let activeBarId = null, settingsOpen = false, isEditing = false, editDraft = null;
+let confirmAction = null, pendingImport = null;
 document.documentElement.dataset.theme = currentTheme;
+
 const $ = (s, root=document) => root.querySelector(s);
 const money = n => n == null ? '—' : '₹' + n;
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const allBars = () => BARS.map(b => ({...b,...(edits[b.id] || {})}));
 const getBar = id => allBars().find(b => b.id === Number(id));
 const triedBars = () => allBars().filter(b => b.tried);
@@ -378,23 +338,25 @@ const ratedBars = () => triedBars().filter(b => b.rating != null);
 const avgRating = () => { const a=ratedBars(); return a.length ? (a.reduce((s,b)=>s+Number(b.rating),0)/a.length).toFixed(2) : '—'; };
 const proteinEfficiency = b => (Number(b.protein) / Number(b.cal)) * 100;
 const ratingTone = score => Number(score) >= 8 ? 'rating-good' : (Number(score) >= 6 ? 'rating-mid' : 'rating-low');
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function price20Options(b) { const values=[]; if (availabilityFilter !== 'Website' && b.blinkit && b.b20 != null) values.push({value:Number(b.b20),source:'Blinkit'}); if (availabilityFilter !== 'Blinkit' && b.website && b.w20 != null) values.push({value:Number(b.w20),source:'Website'}); return values; }
 function bestPrice20(b) { return price20Options(b).sort((a,b)=>a.value-b.value)[0] || null; }
+
 const svg = (name) => {
  const common='fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
  const paths={
-  search:`<circle cx="11" cy="11" r="7" ${common}/><path d="m16.5 16.5 4 4" ${common}/>` ,
-  arrow:`<path d="M5 12h14M13 6l6 6-6 6" ${common}/>` ,
-  home:`<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z" ${common}/>` ,
-  grid:`<rect x="3" y="3" width="7" height="7" rx="1.5" ${common}/><rect x="14" y="3" width="7" height="7" rx="1.5" ${common}/><rect x="3" y="14" width="7" height="7" rx="1.5" ${common}/><rect x="14" y="14" width="7" height="7" rx="1.5" ${common}/>` ,
+  search:`<circle cx="11" cy="11" r="7" ${common}/><path d="m16.5 16.5 4 4" ${common}/>`,
+  grid:`<rect x="3" y="3" width="7" height="7" rx="1.5" ${common}/><rect x="14" y="3" width="7" height="7" rx="1.5" ${common}/><rect x="3" y="14" width="7" height="7" rx="1.5" ${common}/><rect x="14" y="14" width="7" height="7" rx="1.5" ${common}/>`,
   heart:`<path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z" ${common}/>`,
-  moon:`<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.6 8.6 0 1 0 20.5 14.2Z" ${common}/><path d="M16 3v4M14 5h4" ${common}/>` ,
-  sun:`<circle cx="12" cy="12" r="4" ${common}/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" ${common}/>`
+  moon:`<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.6 8.6 0 1 0 20.5 14.2Z" ${common}/><path d="M16 3v4M14 5h4" ${common}/>`,
+  sun:`<circle cx="12" cy="12" r="4" ${common}/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" ${common}/>`,
+  sliders:`<path d="M4 7h9M19 7h1M4 17h1M11 17h9" ${common}/><circle cx="16" cy="7" r="2.4" ${common}/><circle cx="8" cy="17" r="2.4" ${common}/>`
  };
  return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name] || paths.grid}</svg>`;
 };
 const art = s => `<div class="mini-art ${String(s).toLowerCase()}"></div>`;
 const seriesTag = s => `<span class="tag">${s}</span>`;
+
 function card(b) {
  const status = b.tried ? `<span class="tag tried ${b.rating != null ? ratingTone(b.rating) : ''}">${b.rating != null ? `Tried · ${b.rating}/10` : 'Tried'}</span>` : seriesTag(b.series);
  const stock = b.blinkit ? 'Blinkit + web' : 'Website only';
@@ -406,6 +368,7 @@ function card(b) {
    <div class="bar-right"><strong>${money(shownPrice.value)}</strong><small>per bar · ${shownPrice.source}</small><div class="price-foot"><i class="availability-dot ${b.blinkit?'':'off'}"></i>${stock}</div></div>
  </button>`;
 }
+
 function filteredBars() {
  let list=allBars();
  if(tab==='tasted') list=list.filter(b=>b.tried);
@@ -413,7 +376,8 @@ function filteredBars() {
  if(availabilityFilter==='Blinkit') list=list.filter(b=>b.blinkit);
  if(availabilityFilter==='Website') list=list.filter(b=>b.website);
  if(searchText.trim()) { const q=searchText.trim().toLowerCase(); list=list.filter(b=>(b.flavor+' '+b.series).toLowerCase().includes(q)); }
- if(uniqueFlavoursOnly) {
+ // The Unique flavours switch only exists on All bars, so it must not silently shrink the Tried list.
+ if(uniqueFlavoursOnly && tab!=='tasted') {
   const groups=new Map();
   list.forEach(b=>{
    const key=b.flavor.trim().toLowerCase();
@@ -434,22 +398,61 @@ function filteredBars() {
  });
  return list;
 }
-function listHtml() { const items=filteredBars(); return items.length ? items.map(card).join('') : `<div class="empty"><b>No bars found just yet.</b>Try another flavour or loosen the filters.</div>`; }
-function browsePage(isTasted=false) {
- const count=filteredBars().length;
- return `<main>
-  <div class="page-title"><div class="eyebrow">${isTasted?'YOUR TRIED BARS':'THE FULL COLLECTION'}</div><h1>${isTasted?'Your tried bars.':'Protein bars, compared.'}</h1><p>${isTasted?`${count} bars marked as tried.`:`${count} ${uniqueFlavoursOnly?'unique flavours':'bar variants'}.`}</p></div>
-  ${isTasted ? `<div class="taste-hero"><div><div class="eyebrow">YOUR AVERAGE RATING</div><h2>${avgRating()} <span style="font-size:13px;color:#8b819c">/ 10</span></h2><p>${ratedBars().length} rated · ${count} tried</p></div><div class="taste-score"><b>${count}</b><span>TRIED</span></div></div><div class="taste-tip"><div class="tip-dot">✳</div><div>Tap a bar to change its tried status or rating. Saved on this phone.</div></div>` : `<div class="search-wrap">${svg('search')}<input id="searchInput" type="search" placeholder="Search a flavour or series…" value="${escapeHtml(searchText)}" autocomplete="off"></div>
+
+const emptyHtml = () => `<div class="empty"><b>No bars found just yet.</b>Try another flavour or loosen the filters.</div>`;
+const listHtml = items => items.length ? items.map(card).join('') : emptyHtml();
+const summaryText = count => tab==='tasted' ? `${plural(count,'bar')} marked as tried.` : `${plural(count, uniqueFlavoursOnly ? 'unique flavour' : 'bar variant')}.`;
+const resultLabel = count => tab==='tasted' ? `${plural(count,'tried bar')}` : plural(count, uniqueFlavoursOnly ? 'unique flavour' : 'bar');
+
+function browsePage() {
+ const isTasted = tab==='tasted';
+ const items = filteredBars();
+ const header = isTasted
+  ? `<div class="taste-hero"><div><div class="eyebrow">YOUR AVERAGE RATING</div><h2>${avgRating()} <span style="font-size:13px;color:#8b819c">/ 10</span></h2><p>${ratedBars().length} rated · ${triedBars().length} tried</p></div><div class="taste-score"><b>${triedBars().length}</b><span>TRIED</span></div></div><div class="taste-tip"><div class="tip-dot">✳</div><div>Tap a bar to change its tried status or rating. Saved on this phone.</div></div>`
+  : `<div class="search-wrap">${svg('search')}<input id="searchInput" type="search" placeholder="Search a flavour or series…" value="${escapeHtml(searchText)}" autocomplete="off"></div>
    <div class="filter-row">${['All','PRO','Core','Millet','Mini'].map(s=>`<button class="filter-chip ${seriesFilter===s?'active':''}" data-series="${s}">${s}${s==='All'?'<span class="count">23</span>':''}</button>`).join('')}</div><div class="unique-row"><label class="unique-toggle"><input type="checkbox" id="uniqueFlavours" ${uniqueFlavoursOnly?'checked':''}><span class="switch"></span><span>Unique flavours</span></label></div>
-   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · highest first</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · lowest first</option></select></div><div class="sort-helper">Only meaningful comparisons: protein efficiency and cost per 20g protein. Price follows your selected store.</div>`}
-  <div class="results-label"><span id="resultCount">${filteredBars().length} ${isTasted?'rated bars':'bars'}</span><span>Tap a card for details ↗</span></div>
-  <div class="bar-list" id="barsGrid">${listHtml()}</div>
- </main>`;
+   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · highest first</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · lowest first</option></select></div><div class="sort-helper">Only meaningful comparisons: protein efficiency and cost per 20g protein. Price follows your selected store.</div>`;
+ return `<div class="page-title"><div class="eyebrow">${isTasted?'YOUR TRIED BARS':'THE FULL COLLECTION'}</div><h1>${isTasted?'Your tried bars.':'Protein bars, compared.'}</h1><p id="pageSummary">${summaryText(items.length)}</p></div>
+  ${header}
+  <div class="results-label"><span id="resultCount">${resultLabel(items.length)}</span><span>Tap a card for details ↗</span></div>
+  <div class="bar-list" id="barsGrid">${listHtml(items)}</div>`;
 }
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* Rendering: the page shell is built once. After that only the parts that changed are touched,
+   so nothing replays an entrance animation and the screen never flashes. */
+function renderShell() {
+ $('#app').innerHTML = `<header class="topbar"><div class="brand"><div class="brand-mark"></div><div><div class="brand-name">BARBOOK</div><div class="brand-sub">THE WHOLE TRUTH TRACKER</div></div></div><div class="top-actions"><button class="icon-button" data-action="settings" aria-label="Settings" title="Settings">${svg('sliders')}</button><button class="icon-button" data-action="theme" aria-label="Switch to dark mode">${svg(currentTheme==='dark'?'sun':'moon')}</button></div></header><main id="mainView"></main>`;
+}
+function renderMain() { const main=$('#mainView'); if(main) main.innerHTML=browsePage(); }
 function renderNav() {
  $('#bottomNav').innerHTML=[['browse','All bars'],['tasted','Tried']].map(([id,label])=>`<button class="nav-item ${tab===id?'active':''}" data-tab="${id}">${svg(id==='browse'?'grid':'heart')}<span>${label}</span></button>`).join('');
 }
+function updateNav() { document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab)); }
+function render() { renderShell(); renderMain(); renderNav(); applyTheme(); }
+
+function syncListMeta(count) {
+ const label=$('#resultCount'); if(label) label.textContent=resultLabel(count);
+ const summary=$('#pageSummary'); if(summary) summary.textContent=summaryText(count);
+}
+function updateListOnly() {
+ const grid=$('#barsGrid'); if(!grid) return;
+ const items=filteredBars();
+ grid.innerHTML=listHtml(items);
+ syncListMeta(items.length);
+}
+function refreshFilterStates() {
+ document.querySelectorAll('[data-series]').forEach(el=>el.classList.toggle('active',el.dataset.series===seriesFilter));
+ document.querySelectorAll('[data-availability]').forEach(el=>el.classList.toggle('active',el.dataset.availability===availabilityFilter));
+ const unique=$('#uniqueFlavours'); if(unique) unique.checked=uniqueFlavoursOnly;
+}
+function switchTab(next) {
+ if(next===tab) { window.scrollTo(0,0); return; }
+ tab=next;
+ if(tab!=='browse'){seriesFilter='All';availabilityFilter='Any';searchText='';sortMode='efficiency';}
+ renderMain(); updateNav(); window.scrollTo(0,0);
+}
+
+/* Theme */
 function applyTheme() {
  document.documentElement.dataset.theme = currentTheme;
  try { if (window.BarbookNative && window.BarbookNative.setTheme) window.BarbookNative.setTheme(currentTheme === 'dark'); } catch(e) {}
@@ -461,107 +464,217 @@ function applyTheme() {
   toggle.setAttribute('aria-label', currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
   toggle.title = currentTheme === 'dark' ? 'Light mode' : 'Dark mode';
  }
+ document.querySelectorAll('[data-theme-set]').forEach(el=>el.classList.toggle('active',el.dataset.themeSet===currentTheme));
 }
-function toggleTheme() {
- currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
- try { localStorage.setItem(THEME_KEY, currentTheme); } catch(e) {}
+function setTheme(mode) {
+ currentTheme = mode === 'dark' ? 'dark' : 'light';
+ storage.set(THEME_KEY, currentTheme);
  applyTheme();
 }
-function render() {
- $('#app').innerHTML = `<header class="topbar"><div class="brand"><div class="brand-mark"></div><div><div class="brand-name">BARBOOK</div><div class="brand-sub">THE WHOLE TRUTH TRACKER</div></div></div><div class="top-actions"><button class="icon-button" data-action="theme" aria-label="Switch to dark mode">${svg(currentTheme==='dark'?'sun':'moon')}</button></div></header>${browsePage(tab==='tasted')}`;
- renderNav();
- applyTheme();
+function toggleTheme() { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+
+/* Bottom sheets (bar details and settings) share one shell. The entrance animation is only
+   applied when a sheet first opens; later updates patch the content inside the open sheet. */
+function sheetShell(label, inner) {
+ return `<div class="modal-backdrop enter" data-close="backdrop"><section class="sheet enter" role="dialog" aria-modal="true" aria-label="${escapeHtml(label)}">${inner}</section></div>`;
 }
-let listUpdateToken = 0;
-function updateListOnly() {
- const grid=$('#barsGrid'); if(!grid) return;
- const token=++listUpdateToken;
- grid.classList.add('is-updating');
- window.setTimeout(()=>{
-  if(token!==listUpdateToken) return;
-  grid.innerHTML=listHtml();
-  const visibleCount=filteredBars().length;
-  const count=$('#resultCount');
-  if(count) count.textContent=`${visibleCount} ${uniqueFlavoursOnly?'unique flavours':(tab==='tasted'?'tried bars':'bars')}`;
-  const summary=$('.page-title p');
-  if(summary && tab==='browse') summary.textContent=`${visibleCount} ${uniqueFlavoursOnly?'unique flavours':'bar variants'}, with the details worth knowing.`;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-   if(token===listUpdateToken) grid.classList.remove('is-updating');
-  }));
- },140);
+function metaHtml(b) {
+ return seriesTag(b.series) + (b.tried ? `<span class="tag tried ${b.rating != null ? ratingTone(b.rating) : ''}">${b.rating != null ? 'Tried' : 'Tried · unrated'}</span>` : '');
 }
-function refreshFilterStates() {
- document.querySelectorAll('[data-series]').forEach(el=>el.classList.toggle('active',el.dataset.series===seriesFilter));
- document.querySelectorAll('[data-availability]').forEach(el=>el.classList.toggle('active',el.dataset.availability===availabilityFilter));
- const unique=$('#uniqueFlavours'); if(unique) unique.checked=uniqueFlavoursOnly;
-}
-function detailHtml(b) {
+function tastingHtml(b) {
  const tried=b.tried;
- const best20=bestPrice20(b);
  const logStatus = !tried ? 'Not tried yet' : (b.rating != null ? `Rated ${b.rating}/10` : 'Tried · not rated yet');
- const tastingControls = isEditing ? `
+ const controls = isEditing ? `
    <p class="edit-note">Changes stay in draft until you tap Save.</p>
    <div class="edit-state"><button class="edit-option ${editDraft.tried?'':'active'}" data-draft-tried="no">Not tried</button><button class="edit-option ${editDraft.tried?'active':''}" data-draft-tried="yes">Tried it</button></div>
    ${editDraft.tried ? `<div class="edit-rating-title">RATING · OUT OF 10</div><div class="rating-buttons">${Array.from({length:10},(_,i)=>i+1).map(n=>`<button class="${editDraft.rating===n ? `active ${ratingTone(n)}` : ''}" data-draft-rate="${n}">${n}</button>`).join('')}</div>` : `<p class="edit-note">A rating is available when you mark this bar as tried.</p>`}
    <div class="edit-actions"><button class="discard-button" data-discard>Discard</button><button class="save-button" data-save ${hasDraftChanges()?'':'disabled'}>Save changes</button></div>` : `
    <div class="read-only-log"><span class="${tried && b.rating != null ? ratingTone(b.rating) : ''}">${tried ? (b.rating != null ? `Tried · ${b.rating}/10 rating.` : 'Tried · not rated yet.') : 'Not tried yet.'}</span><button class="edit-log-button" data-edit> Edit status & rating </button></div>`;
- return `<div class="modal-backdrop" data-close="backdrop"><section class="sheet" role="dialog" aria-modal="true" aria-label="${escapeHtml(b.flavor)} details"><div class="sheet-handle"></div>
-  <div class="sheet-top"><div class="sheet-title">${art(b.series)}<div><div class="meta">${seriesTag(b.series)}${tried?`<span class="tag tried ${b.rating != null ? ratingTone(b.rating) : ''}">${b.rating != null ? 'Tried' : 'Tried · unrated'}</span>`:''}</div><h2>${escapeHtml(b.flavor)}</h2><p>${b.series} series · ${b.protein}g protein per bar</p></div></div><button class="close-button" data-close="button" aria-label="Close">×</button></div>
+ return `<div class="tasting-head"><b>Your status & rating</b><span>${logStatus}</span></div>${controls}`;
+}
+function detailInnerHtml(b) {
+ const best20=bestPrice20(b);
+ return `<div class="sheet-handle"></div>
+  <div class="sheet-top"><div class="sheet-title">${art(b.series)}<div><div class="meta" id="sheetMeta">${metaHtml(b)}</div><h2>${escapeHtml(b.flavor)}</h2><p>${b.series} series · ${b.protein}g protein per bar</p></div></div><button class="close-button" data-close="button" aria-label="Close">×</button></div>
   <div class="sheet-stats"><div class="sheet-stat"><b>${b.protein}g</b><span>PROTEIN</span></div><div class="sheet-stat"><b>${b.cal}</b><span>CALORIES</span></div><div class="sheet-stat"><b>${proteinEfficiency(b).toFixed(2)}</b><span>PROTEIN / 100 KCAL</span></div></div>
   <div class="detail-section"><h3>Price comparison</h3><div class="price-row"><span>Website · per bar</span><b>${money(b.website?b.wPrice:null)}</b></div><div class="price-row"><span>Blinkit · per bar</span><b>${money(b.blinkit?b.bPrice:null)}</b></div><div class="price-row"><span>Website · per 20g protein</span><b>${money(b.website?b.w20:null)}</b></div><div class="price-row"><span>Blinkit · per 20g protein</span><b>${money(b.blinkit?b.b20:null)}</b></div>${best20?`<div class="price-row"><span>Best available · per 20g</span><b>${money(best20.value)} · ${best20.source}</b></div>`:''}</div>
   <div class="detail-section"><h3>Availability</h3><div class="availability-pills"><span class="${b.blinkit?'':'off'}">${b.blinkit?'✓':'—'} Blinkit</span><span class="${b.website?'':'off'}">${b.website?'✓':'—'} Website</span></div></div>
-  <div class="tasting-box"><div class="tasting-head"><b>Your status & rating</b><span>${logStatus}</span></div>${tastingControls}</div>
- </section></div>`;
+  <div class="tasting-box" id="tastingBox">${tastingHtml(b)}</div>`;
 }
 function renderDetails() {
  const b=getBar(activeBarId); if(!b) return;
- const oldSheet=$('.sheet'); const oldScroll=oldSheet ? oldSheet.scrollTop : 0;
- $('#modalRoot').innerHTML=detailHtml(b);
- const newSheet=$('.sheet'); if(newSheet) newSheet.scrollTop=oldScroll;
+ const box=$('#tastingBox'); if(box) box.innerHTML=tastingHtml(b);
+ const meta=$('#sheetMeta'); if(meta) meta.innerHTML=metaHtml(b);
 }
-function openDetails(id) { activeBarId=Number(id); const b=getBar(activeBarId); if(!b)return; isEditing=false; editDraft=null; $('#modalRoot').innerHTML=detailHtml(b); document.body.style.overflow='hidden'; }
-function closeDetails() { $('#modalRoot').innerHTML=''; document.body.style.overflow=''; activeBarId=null; isEditing=false; editDraft=null; }
+function revealTastingBox() { const box=$('#tastingBox'); if(box && box.scrollIntoView) box.scrollIntoView({block:'nearest'}); }
+function openDetails(id) {
+ activeBarId=Number(id); const b=getBar(activeBarId); if(!b) return;
+ settingsOpen=false; isEditing=false; editDraft=null;
+ $('#modalRoot').innerHTML=sheetShell(`${b.flavor} details`, detailInnerHtml(b));
+ document.body.style.overflow='hidden';
+}
+function closeSheet() {
+ $('#modalRoot').innerHTML=''; document.body.style.overflow='';
+ activeBarId=null; settingsOpen=false; isEditing=false; editDraft=null; confirmAction=null; pendingImport=null;
+}
 function hasDraftChanges() {
  if (!isEditing || !editDraft || activeBarId==null) return false;
  const current=getBar(activeBarId);
  return !!current && (Boolean(current.tried)!==Boolean(editDraft.tried) || (current.rating??null)!==(editDraft.rating??null));
 }
-function startEditing() { const b=getBar(activeBarId); if(!b)return; editDraft={tried:Boolean(b.tried),rating:b.rating??null}; isEditing=true; renderDetails(); }
-function changeDraftTried(value) { if(!editDraft)return; editDraft.tried=value; renderDetails(); }
+function startEditing() { const b=getBar(activeBarId); if(!b)return; editDraft={tried:Boolean(b.tried),rating:b.rating??null}; isEditing=true; renderDetails(); revealTastingBox(); }
+function changeDraftTried(value) { if(!editDraft)return; editDraft.tried=value; renderDetails(); revealTastingBox(); }
 function changeDraftRating(score) { if(!editDraft)return; editDraft.tried=true; editDraft.rating=score; renderDetails(); }
 function saveDraft() {
  if(!isEditing || !editDraft || activeBarId==null || !hasDraftChanges())return;
  edits[activeBarId]={...(edits[activeBarId]||{}),tried:Boolean(editDraft.tried),rating:editDraft.tried ? (editDraft.rating??null) : null};
- persist(); isEditing=false; editDraft=null; render(); renderDetails(); toast('Changes saved');
+ persist(); isEditing=false; editDraft=null; renderDetails(); renderMain(); toast('Changes saved');
 }
 function discardDraft() { isEditing=false; editDraft=null; renderDetails(); }
-function showDiscardPrompt() {
- if($('#discardPrompt'))return;
- $('#modalRoot').insertAdjacentHTML('beforeend', `<div class="confirm-backdrop" id="discardPrompt"><div class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="discardTitle"><h3 id="discardTitle">Discard your changes?</h3><p>Your changes haven’t been saved. You can keep editing or discard the draft.</p><div class="confirm-actions"><button class="confirm-button" data-confirm="keep">Keep editing</button><button class="confirm-button danger" data-confirm="discard">Discard changes</button></div></div></div>`);
-}
-function requestCloseDetails() { if(isEditing && hasDraftChanges()){showDiscardPrompt();return;} closeDetails(); }
-function handleBackPressed() { if($('#discardPrompt')) { $('#discardPrompt').remove(); return true; } if(activeBarId!=null) { requestCloseDetails(); return true; } return false; }
-function persist() { try { localStorage.setItem(STORE_KEY,JSON.stringify(edits)); } catch(e){} }
+function persist() { storage.set(STORE_KEY, JSON.stringify(edits)); }
 function toast(message) { const el=$('#toast'); el.textContent=message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),2200); }
+
+/* Confirmation dialog */
+function showConfirm(title, body, okLabel, cancelLabel, action) {
+ if($('.confirm-backdrop')) return;
+ confirmAction=action;
+ $('#modalRoot').insertAdjacentHTML('beforeend', `<div class="confirm-backdrop"><div class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle"><h3 id="confirmTitle">${escapeHtml(title)}</h3><p>${escapeHtml(body)}</p><div class="confirm-actions"><button class="confirm-button" data-confirm="cancel">${escapeHtml(cancelLabel)}</button><button class="confirm-button danger" data-confirm="ok">${escapeHtml(okLabel)}</button></div></div></div>`);
+}
+function dismissConfirm(run) {
+ const action=confirmAction; confirmAction=null;
+ const dialog=$('.confirm-backdrop'); if(dialog) dialog.remove();
+ if(run && action) action();
+}
+function requestCloseSheet() {
+ if(isEditing && hasDraftChanges()){ showConfirm('Discard your changes?','Your changes haven’t been saved. You can keep editing or discard the draft.','Discard changes','Keep editing',closeSheet); return; }
+ closeSheet();
+}
+function handleBackPressed() {
+ if($('.confirm-backdrop')) { dismissConfirm(false); return true; }
+ if(activeBarId!=null || settingsOpen) { requestCloseSheet(); return true; }
+ return false;
+}
+
+/* Settings and backup */
+function cleanEdits(source) {
+ const out={};
+ if(!source || typeof source!=='object' || Array.isArray(source)) return out;
+ Object.keys(source).forEach(key=>{
+  const id=Number(key);
+  if(!BARS.some(b=>b.id===id)) return;
+  const entry=source[key];
+  if(!entry || typeof entry!=='object') return;
+  const tried=entry.tried===true;
+  let rating=null;
+  if(tried && entry.rating!=null){ const n=Number(entry.rating); if(Number.isInteger(n) && n>=1 && n<=10) rating=n; }
+  out[id]={tried,rating};
+ });
+ return out;
+}
+function backupCounts(map) {
+ const list=Object.keys(map).map(k=>map[k]);
+ return {total:list.length, tried:list.filter(e=>e.tried).length, rated:list.filter(e=>e.rating!=null).length};
+}
+function buildBackup() {
+ return {app:'barbook', format:BACKUP_FORMAT, appVersion:APP_VERSION, exportedAt:new Date().toISOString(), edits:cleanEdits(edits), settings:{theme:currentTheme, uniqueFlavours:uniqueFlavoursOnly}};
+}
+function backupFileName() {
+ const d=new Date(); const p=n=>String(n).padStart(2,'0');
+ return `barbook-backup-${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}.json`;
+}
+function settingsInnerHtml() {
+ const tried=triedBars().length, rated=ratedBars().length;
+ return `<div class="sheet-handle"></div>
+  <div class="sheet-top"><div class="sheet-title"><div><h2>Settings</h2><p>Barbook v${APP_VERSION} · everything stays on this phone</p></div></div><button class="close-button" data-close="button" aria-label="Close">×</button></div>
+  <div class="detail-section"><h3>Appearance</h3><div class="edit-state"><button class="edit-option ${currentTheme==='light'?'active':''}" data-theme-set="light">Light</button><button class="edit-option ${currentTheme==='dark'?'active':''}" data-theme-set="dark">Dark</button></div></div>
+  <div class="detail-section"><h3>Backup</h3>
+   <div class="setting-row"><div><b>Export ratings</b><small>${plural(tried,'tried bar')} · ${rated} rated. Saves a file you can keep.</small></div><button class="edit-log-button" data-export>Export</button></div>
+   <div class="setting-row"><div><b>Import ratings</b><small>Replace current ratings with a Barbook backup file.</small></div><button class="edit-log-button" data-import>Import</button></div>
+   <p class="edit-note" id="backupNote">Uninstalling the app or clearing its data erases your ratings, so export a backup first.</p>
+  </div>`;
+}
+function openSettings() {
+ activeBarId=null; isEditing=false; editDraft=null; settingsOpen=true;
+ $('#modalRoot').innerHTML=sheetShell('Settings', settingsInnerHtml());
+ document.body.style.overflow='hidden';
+}
+function refreshSettings() { const sheet=$('.sheet'); if(settingsOpen && sheet) sheet.innerHTML=settingsInnerHtml(); }
+function setBackupNote(text) { const note=$('#backupNote'); if(note) note.textContent=text; }
+
+function exportBackup() {
+ const name=backupFileName();
+ const json=JSON.stringify(buildBackup(),null,2);
+ if(window.BarbookNative && window.BarbookNative.saveBackup) { window.BarbookNative.saveBackup(name,json); return; }
+ const link=document.createElement('a');
+ link.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));
+ link.download=name; document.body.appendChild(link); link.click(); link.remove();
+ setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+ toast('Backup downloaded');
+}
+function importBackup() {
+ if(window.BarbookNative && window.BarbookNative.pickBackup) { window.BarbookNative.pickBackup(); return; }
+ const input=$('#importFile'); if(input) input.click();
+}
+function parseBackup(text) {
+ if(typeof text!=='string' || text.length>MAX_BACKUP_CHARS) return {error:'That file is too large to be a Barbook backup.'};
+ let data;
+ try { data=JSON.parse(text); } catch(e) { return {error:'That file is not a valid Barbook backup.'}; }
+ if(!data || typeof data!=='object' || data.app!=='barbook' || !data.edits || typeof data.edits!=='object' || Array.isArray(data.edits)) return {error:'That file is not a valid Barbook backup.'};
+ const map=cleanEdits(data.edits);
+ const settings=data.settings && typeof data.settings==='object' ? data.settings : {};
+ return {edits:map, settings, counts:backupCounts(map)};
+}
+function applyImport(result) {
+ edits=result.edits; persist();
+ if(result.settings.theme==='light' || result.settings.theme==='dark') setTheme(result.settings.theme);
+ if(typeof result.settings.uniqueFlavours==='boolean'){ uniqueFlavoursOnly=result.settings.uniqueFlavours; storage.set(UNIQUE_KEY,String(uniqueFlavoursOnly)); }
+ renderMain(); refreshSettings(); applyTheme();
+ toast('Backup restored');
+}
+/* Called by the Android wrapper (or the browser file input) once a backup file has been read. */
+function onBackupPicked(text) {
+ const result=parseBackup(text);
+ if(result.error){ setBackupNote(result.error); toast('Import failed'); return; }
+ pendingImport=result;
+ const c=result.counts;
+ showConfirm('Replace your ratings?', `This backup has ${plural(c.tried,'tried bar')} and ${c.rated} rated. Your current ratings on this phone will be replaced.`, 'Replace ratings', 'Cancel', ()=>{ const r=pendingImport; pendingImport=null; if(r) applyImport(r); });
+}
+function onBackupSaved(ok) { toast(ok ? 'Backup saved' : 'Backup cancelled'); }
+function onBackupError(message) { setBackupNote(message || 'Something went wrong with the backup file.'); toast('Backup failed'); }
+
+/* Events */
 document.addEventListener('click',e=>{
- const theme=e.target.closest('[data-action="theme"]'); if(theme){toggleTheme();return;}
- const confirm=e.target.closest('[data-confirm]'); if(confirm){if(confirm.dataset.confirm==='discard')closeDetails();else $('#discardPrompt')?.remove();return;}
- const nav=e.target.closest('[data-tab]'); if(nav){ tab=nav.dataset.tab; if(tab!=='browse'){seriesFilter='All';availabilityFilter='Any';searchText='';sortMode='efficiency';} render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
- const series=e.target.closest('[data-series]'); if(series){seriesFilter=series.dataset.series;refreshFilterStates();updateListOnly();return;}
- const availability=e.target.closest('[data-availability]'); if(availability){availabilityFilter=availability.dataset.availability;refreshFilterStates();updateListOnly();return;}
- const uniqueToggle=e.target.closest('#uniqueFlavours'); if(uniqueToggle){uniqueFlavoursOnly=uniqueToggle.checked;try{localStorage.setItem(UNIQUE_KEY,String(uniqueFlavoursOnly));}catch(e){} updateListOnly();return;}
- const open=e.target.closest('[data-open]'); if(open){openDetails(open.dataset.open);return;}
- const close=e.target.closest('[data-close]'); if(close && (close.dataset.close==='button'||e.target===close)){requestCloseDetails();return;}
- if(e.target.closest('[data-edit]')){startEditing();return;}
- const draftTried=e.target.closest('[data-draft-tried]'); if(draftTried){changeDraftTried(draftTried.dataset.draftTried==='yes');return;}
- const draftRate=e.target.closest('[data-draft-rate]'); if(draftRate){changeDraftRating(Number(draftRate.dataset.draftRate));return;}
- if(e.target.closest('[data-save]')){saveDraft();return;}
- if(e.target.closest('[data-discard]')){discardDraft();return;}
+ const t=e.target;
+ const action=t.closest('[data-action]'); if(action){ if(action.dataset.action==='theme') toggleTheme(); else if(action.dataset.action==='settings') openSettings(); return; }
+ const confirmBtn=t.closest('[data-confirm]'); if(confirmBtn){ dismissConfirm(confirmBtn.dataset.confirm==='ok'); return; }
+ const nav=t.closest('[data-tab]'); if(nav){ switchTab(nav.dataset.tab); return; }
+ const series=t.closest('[data-series]'); if(series){seriesFilter=series.dataset.series;refreshFilterStates();updateListOnly();return;}
+ const availability=t.closest('[data-availability]'); if(availability){availabilityFilter=availability.dataset.availability;refreshFilterStates();updateListOnly();return;}
+ const uniqueToggle=t.closest('#uniqueFlavours'); if(uniqueToggle){uniqueFlavoursOnly=uniqueToggle.checked;storage.set(UNIQUE_KEY,String(uniqueFlavoursOnly));updateListOnly();return;}
+ const open=t.closest('[data-open]'); if(open){openDetails(open.dataset.open);return;}
+ const close=t.closest('[data-close]'); if(close && (close.dataset.close==='button'||t===close)){requestCloseSheet();return;}
+ const themeSet=t.closest('[data-theme-set]'); if(themeSet){setTheme(themeSet.dataset.themeSet);return;}
+ if(t.closest('[data-export]')){exportBackup();return;}
+ if(t.closest('[data-import]')){importBackup();return;}
+ if(t.closest('[data-edit]')){startEditing();return;}
+ const draftTried=t.closest('[data-draft-tried]'); if(draftTried){changeDraftTried(draftTried.dataset.draftTried==='yes');return;}
+ const draftRate=t.closest('[data-draft-rate]'); if(draftRate){changeDraftRating(Number(draftRate.dataset.draftRate));return;}
+ if(t.closest('[data-save]')){saveDraft();return;}
+ if(t.closest('[data-discard]')){discardDraft();return;}
 });
 document.addEventListener('input',e=>{if(e.target.id==='searchInput'){searchText=e.target.value;updateListOnly();}});
-document.addEventListener('change',e=>{if(e.target.id==='sortSelect'){sortMode=e.target.value;updateListOnly();}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#discardPrompt')){$('#discardPrompt').remove();return;}requestCloseDetails();}});
-if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+document.addEventListener('change',e=>{
+ if(e.target.id==='sortSelect'){sortMode=e.target.value;updateListOnly();return;}
+ if(e.target.id==='importFile'){
+  const file=e.target.files && e.target.files[0]; e.target.value='';
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>onBackupPicked(String(reader.result||''));
+  reader.onerror=()=>onBackupError('Could not read that file.');
+  reader.readAsText(file);
+ }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){ if($('.confirm-backdrop')){dismissConfirm(false);return;} if(activeBarId!=null||settingsOpen) requestCloseSheet(); }});
 render();
 </script>
 </body>

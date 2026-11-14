@@ -3,3 +3,6 @@
 local.properties
 **/build/
 .DS_Store
+dist/
+*.apk
+*.aab

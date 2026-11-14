@@ -44,12 +44,17 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build Barbook APK
-        run: gradle --no-daemon :app:assembleDebug
+      - name: Build signed APK
+        run: gradle --no-daemon :app:assembleRelease
+
+      - name: Check APK signature
+        run: |
+          APKSIGNER=$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -name apksigner | sort -V | tail -n 1)
+          "$APKSIGNER" verify --print-certs app/build/outputs/apk/release/app-release.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: barbook-v1.4-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: barbook-apk
+          path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
