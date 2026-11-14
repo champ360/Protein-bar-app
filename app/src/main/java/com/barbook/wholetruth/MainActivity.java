@@ -3,6 +3,8 @@ package com.barbook.wholetruth;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ public class MainActivity extends Activity {
     private static final int REQUEST_EXPORT = 4101;
     private static final int REQUEST_IMPORT = 4102;
     private static final int MAX_BACKUP_BYTES = 1000000;
+    private static final String PREFS = "barbook";
+    private static final String PREF_DARK = "dark";
 
     private WebView webView;
     private String pendingExport;
@@ -32,10 +36,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updateSystemBars(false);
+        // Start in the theme the user last chose, so a dark-mode user never sees a light flash
+        // while the page is still loading. The page confirms the theme once it is running.
+        boolean dark = getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(PREF_DARK, false);
 
         webView = new WebView(this);
-        webView.setBackgroundColor(Color.rgb(247, 246, 242));
+        updateSystemBars(dark);
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         webView.setVerticalScrollBarEnabled(false);
 
@@ -53,8 +59,16 @@ public class MainActivity extends Activity {
         webView.loadUrl("file:///android_asset/index.html");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Coming back from recents: repaint the window and WebView in the saved theme straight away.
+        updateSystemBars(getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(PREF_DARK, false));
+    }
+
     private void updateSystemBars(boolean dark) {
         int barColor = dark ? Color.rgb(21, 20, 27) : Color.rgb(247, 246, 242);
+        getWindow().setBackgroundDrawable(new ColorDrawable(barColor));
         getWindow().setStatusBarColor(barColor);
         getWindow().setNavigationBarColor(barColor);
         int flags = dark ? 0 : (View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
@@ -71,6 +85,7 @@ public class MainActivity extends Activity {
     private final class NativeBridge {
         @JavascriptInterface
         public void setTheme(boolean dark) {
+            getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(PREF_DARK, dark).apply();
             runOnUiThread(() -> updateSystemBars(dark));
         }
 

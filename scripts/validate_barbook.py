@@ -56,6 +56,8 @@ require('aria-label="Search bars"' not in html, "Inert top-right search shortcut
 require('id="searchInput"' in html, "Functional catalogue search field must remain")
 require("Hide duplicate pack sizes" not in html and "unique-hint" not in html, "Redundant unique-flavour helper text must stay removed")
 require("Prices and nutrition from your tracker sheet" not in html and "footer-note" not in html, "Redundant tracker footer note must stay removed")
+require("sort-helper" not in html and "Only meaningful comparisons" not in html, "The sort helper sentence must stay removed")
+require('data-action="theme"' not in html, "Dark mode lives only in Settings; do not put a theme button back in the header")
 require("serviceWorker" not in html, "The service-worker registration is dead code in the Android WebView; do not reintroduce it")
 
 # --- Local-only personal data and agreed rating controls.
@@ -70,6 +72,12 @@ require("<textarea" not in html.lower() and "tasting notes" not in html.lower(),
 require('flavor:"Hazelnut Cocoa",series:"PRO"' in html and "tried:true,rating:6" in html, "Hazelnut Cocoa should be seeded as tried with a 6/10 rating")
 require("group.tasting.rating" in html and "group.representative" in html, "Unique-flavour view must carry tasting status from matching pack variants")
 require(len(re.findall(r"\{id:\d+,flavor:", html)) == 23, "The catalogue should contain exactly 23 bars unless a data change was requested")
+
+# --- Dark mode: no light flash, no light line.
+require("var(--nav-line)" in html and "rgba(225,222,216,.8)" not in re.search(r"\.bottom-nav\s*\{[^}]*\}", html).group(0),
+        "The bottom bar border must use the themed --nav-line variable (a fixed light colour shows as a white line in dark mode)")
+require("html.preload" in html and "localStorage.getItem('barbook-theme-v1')" in html.split("</head>")[0], "The saved theme must be applied in <head> before first paint")
+require("getSharedPreferences" in java and "onResume" in java and "setBackgroundDrawable" in java, "MainActivity must remember the theme and apply it at start and resume (prevents a white flash in dark mode)")
 
 # --- Settings, export and import.
 require("data-export" in html and "data-import" in html, "Settings must offer Export and Import")
@@ -107,10 +115,10 @@ for workflow in sorted(WORKFLOWS.glob("*.yml")):
 
 # --- JavaScript syntax check.
 script_blocks = re.findall(r"<script>(.*?)</script>", html, re.S)
-require(len(script_blocks) == 1, f"Expected one inline JavaScript block; found {len(script_blocks)}")
-if len(script_blocks) == 1:
+require(len(script_blocks) == 2, f"Expected the small theme script in <head> plus one app script; found {len(script_blocks)} inline blocks")
+if script_blocks:
     with tempfile.NamedTemporaryFile(mode="w", suffix=".js", encoding="utf-8") as js_file:
-        js_file.write(script_blocks[0])
+        js_file.write("\n;\n".join(script_blocks))
         js_file.flush()
         try:
             result = subprocess.run(["node", "--check", js_file.name], capture_output=True, text=True, check=False)
@@ -127,6 +135,7 @@ print(f"Barbook v{version_name.group(1)} checks passed:")
 print("- direct-to-All-bars navigation; no Home, inert search shortcut or dead service worker")
 print("- two approved sorts; compact unique-flavours switch; catalogue intact")
 print("- rating colours, Hazelnut Cocoa 6/10 seed, local-only data, Save/Discard, dark mode")
-print("- Settings with export/import wired to the Android file bridge")
+print("- Settings with export/import wired to the Android file bridge; dark mode only in Settings")
+print("- dark mode: themed bottom-bar border, saved theme applied before first paint and at app start/resume")
 print("- no entrance animations or full re-renders on ordinary taps")
 print("- fixed signing key, signed release build, versions in sync; JavaScript syntax valid")

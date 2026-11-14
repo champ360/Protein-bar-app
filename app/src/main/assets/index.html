@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f6f2">
+  <script>
+    /* Apply the saved theme before anything is painted so a dark-mode user never sees a light frame. */
+    (function(){ var d=document.documentElement; d.className='preload';
+      try { if (localStorage.getItem('barbook-theme-v1')==='dark') d.dataset.theme='dark'; } catch(e) {} })();
+  </script>
   <meta name="description" content="A simple personal tracker for The Whole Truth protein bars.">
   <title>Barbook — The Whole Truth tracker</title>
   <style>
@@ -23,8 +28,10 @@
       --lavender: #eeeaf7;
       --lime: #dafa66;
       --nav-surface: rgba(255,255,255,.94);
+      --nav-line: rgba(225,222,216,.8);
       --shadow: 0 12px 34px rgba(43, 37, 54, .07);
     }
+    html.preload *, html.preload *::before, html.preload *::after { transition:none !important; animation:none !important; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html { min-height: 100%; background: var(--paper); }
     body {
@@ -93,7 +100,6 @@
     .availability-tabs button { border:0; background:transparent; color:#817c86; border-radius:9px; padding:7px 9px; font-size:9px; font-weight:800; white-space:nowrap; }
     .availability-tabs button.active { background:var(--surface); color:var(--plum); box-shadow:0 1px 4px rgba(0,0,0,.06); }
     .sort-select { border:1px solid var(--line); background:var(--surface); border-radius:11px; padding:8px 10px; color:var(--ink); font-size:10px; font-weight:750; outline:none; width:min(48%,180px); min-width:132px; }
-    .sort-helper { color:var(--muted); font-size:9px; line-height:1.4; margin:-4px 2px 11px; }
     .results-label { display:flex; justify-content:space-between; color:var(--muted); font-size:10px; font-weight:750; margin: 0 2px 10px; }
     .bar-list { display:grid; gap:9px; }
     .bar-card { width:100%; text-align:left; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:19px; display:flex; align-items:center; gap:12px; padding:12px; min-width:0; transition:transform .38s cubic-bezier(.2,.7,.2,1), box-shadow .38s ease, background-color .38s ease, border-color .38s ease; }
@@ -124,7 +130,7 @@
     .taste-score span { font-size:8px; color:var(--muted); font-weight:800; margin-top:4px; }
     .taste-tip { display:flex; gap:10px; align-items:center; padding:12px 14px; border-radius:16px; background:var(--surface); border:1px solid var(--line); margin:13px 0 17px; color:#716b79; font-size:10px; line-height:1.4; }
     .taste-tip .tip-dot { width:25px; height:25px; border-radius:9px; flex:0 0 auto; display:grid; place-items:center; background:#f4f0d9; color:#8a7939; font-weight:900; }
-    .bottom-nav { position:fixed; z-index:10; bottom:0; left:50%; transform:translateX(-50%); width:min(100%,620px); padding:10px 18px calc(10px + env(safe-area-inset-bottom)); background:var(--nav-surface); backdrop-filter:blur(18px); border-top:1px solid rgba(225,222,216,.8); display:grid; grid-template-columns:repeat(2,1fr); }
+    .bottom-nav { position:fixed; z-index:10; bottom:0; left:50%; transform:translateX(-50%); width:min(100%,620px); padding:10px 18px calc(10px + env(safe-area-inset-bottom)); background:var(--nav-surface); backdrop-filter:blur(18px); border-top:1px solid var(--nav-line); display:grid; grid-template-columns:repeat(2,1fr); }
     .nav-item { border:0; background:transparent; color:#9b96a1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:4px 0; font-size:9px; font-weight:800; transition:color .38s ease, transform .38s cubic-bezier(.2,.7,.2,1); }
     .nav-item:active { transform:translateY(1px); }
     .nav-item svg { width:19px; height:19px; stroke-width:1.8; }
@@ -208,6 +214,7 @@
       --plum-dark:#242130;
       --lavender:#302b40;
       --nav-surface:rgba(29,27,37,.95);
+      --nav-line:rgba(70,65,86,.7);
       --shadow:0 14px 38px rgba(0,0,0,.24);
     }
     :root[data-theme="dark"] body { background:var(--paper); color:var(--ink); }
@@ -348,8 +355,6 @@ const svg = (name) => {
   search:`<circle cx="11" cy="11" r="7" ${common}/><path d="m16.5 16.5 4 4" ${common}/>`,
   grid:`<rect x="3" y="3" width="7" height="7" rx="1.5" ${common}/><rect x="14" y="3" width="7" height="7" rx="1.5" ${common}/><rect x="3" y="14" width="7" height="7" rx="1.5" ${common}/><rect x="14" y="14" width="7" height="7" rx="1.5" ${common}/>`,
   heart:`<path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z" ${common}/>`,
-  moon:`<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.6 8.6 0 1 0 20.5 14.2Z" ${common}/><path d="M16 3v4M14 5h4" ${common}/>`,
-  sun:`<circle cx="12" cy="12" r="4" ${common}/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" ${common}/>`,
   sliders:`<path d="M4 7h9M19 7h1M4 17h1M11 17h9" ${common}/><circle cx="16" cy="7" r="2.4" ${common}/><circle cx="8" cy="17" r="2.4" ${common}/>`
  };
  return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name] || paths.grid}</svg>`;
@@ -411,7 +416,7 @@ function browsePage() {
   ? `<div class="taste-hero"><div><div class="eyebrow">YOUR AVERAGE RATING</div><h2>${avgRating()} <span style="font-size:13px;color:#8b819c">/ 10</span></h2><p>${ratedBars().length} rated · ${triedBars().length} tried</p></div><div class="taste-score"><b>${triedBars().length}</b><span>TRIED</span></div></div><div class="taste-tip"><div class="tip-dot">✳</div><div>Tap a bar to change its tried status or rating. Saved on this phone.</div></div>`
   : `<div class="search-wrap">${svg('search')}<input id="searchInput" type="search" placeholder="Search a flavour or series…" value="${escapeHtml(searchText)}" autocomplete="off"></div>
    <div class="filter-row">${['All','PRO','Core','Millet','Mini'].map(s=>`<button class="filter-chip ${seriesFilter===s?'active':''}" data-series="${s}">${s}${s==='All'?'<span class="count">23</span>':''}</button>`).join('')}</div><div class="unique-row"><label class="unique-toggle"><input type="checkbox" id="uniqueFlavours" ${uniqueFlavoursOnly?'checked':''}><span class="switch"></span><span>Unique flavours</span></label></div>
-   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · highest first</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · lowest first</option></select></div><div class="sort-helper">Only meaningful comparisons: protein efficiency and cost per 20g protein. Price follows your selected store.</div>`;
+   <div class="filter-toolbar"><div class="availability-tabs">${['Any','Blinkit','Website'].map(s=>`<button class="${availabilityFilter===s?'active':''}" data-availability="${s}">${s}</button>`).join('')}</div><select class="sort-select" id="sortSelect" aria-label="Sort bars"><option value="efficiency" ${sortMode==='efficiency'?'selected':''}>Protein / 100 kcal · highest first</option><option value="price20" ${sortMode==='price20'?'selected':''}>₹ / 20g protein · lowest first</option></select></div>`;
  return `<div class="page-title"><div class="eyebrow">${isTasted?'YOUR TRIED BARS':'THE FULL COLLECTION'}</div><h1>${isTasted?'Your tried bars.':'Protein bars, compared.'}</h1><p id="pageSummary">${summaryText(items.length)}</p></div>
   ${header}
   <div class="results-label"><span id="resultCount">${resultLabel(items.length)}</span><span>Tap a card for details ↗</span></div>
@@ -421,7 +426,7 @@ function browsePage() {
 /* Rendering: the page shell is built once. After that only the parts that changed are touched,
    so nothing replays an entrance animation and the screen never flashes. */
 function renderShell() {
- $('#app').innerHTML = `<header class="topbar"><div class="brand"><div class="brand-mark"></div><div><div class="brand-name">BARBOOK</div><div class="brand-sub">THE WHOLE TRUTH TRACKER</div></div></div><div class="top-actions"><button class="icon-button" data-action="settings" aria-label="Settings" title="Settings">${svg('sliders')}</button><button class="icon-button" data-action="theme" aria-label="Switch to dark mode">${svg(currentTheme==='dark'?'sun':'moon')}</button></div></header><main id="mainView"></main>`;
+ $('#app').innerHTML = `<header class="topbar"><div class="brand"><div class="brand-mark"></div><div><div class="brand-name">BARBOOK</div><div class="brand-sub">THE WHOLE TRUTH TRACKER</div></div></div><div class="top-actions"><button class="icon-button" data-action="settings" aria-label="Settings" title="Settings">${svg('sliders')}</button></div></header><main id="mainView"></main>`;
 }
 function renderMain() { const main=$('#mainView'); if(main) main.innerHTML=browsePage(); }
 function renderNav() {
@@ -458,12 +463,6 @@ function applyTheme() {
  try { if (window.BarbookNative && window.BarbookNative.setTheme) window.BarbookNative.setTheme(currentTheme === 'dark'); } catch(e) {}
  const meta = $('meta[name="theme-color"]');
  if (meta) meta.content = currentTheme === 'dark' ? '#15141b' : '#f7f6f2';
- const toggle = $('[data-action="theme"]');
- if (toggle) {
-  toggle.innerHTML = svg(currentTheme === 'dark' ? 'sun' : 'moon');
-  toggle.setAttribute('aria-label', currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-  toggle.title = currentTheme === 'dark' ? 'Light mode' : 'Dark mode';
- }
  document.querySelectorAll('[data-theme-set]').forEach(el=>el.classList.toggle('active',el.dataset.themeSet===currentTheme));
 }
 function setTheme(mode) {
@@ -471,7 +470,6 @@ function setTheme(mode) {
  storage.set(THEME_KEY, currentTheme);
  applyTheme();
 }
-function toggleTheme() { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
 
 /* Bottom sheets (bar details and settings) share one shell. The entrance animation is only
    applied when a sheet first opens; later updates patch the content inside the open sheet. */
@@ -645,7 +643,7 @@ function onBackupError(message) { setBackupNote(message || 'Something went wrong
 /* Events */
 document.addEventListener('click',e=>{
  const t=e.target;
- const action=t.closest('[data-action]'); if(action){ if(action.dataset.action==='theme') toggleTheme(); else if(action.dataset.action==='settings') openSettings(); return; }
+ const action=t.closest('[data-action]'); if(action){ if(action.dataset.action==='settings') openSettings(); return; }
  const confirmBtn=t.closest('[data-confirm]'); if(confirmBtn){ dismissConfirm(confirmBtn.dataset.confirm==='ok'); return; }
  const nav=t.closest('[data-tab]'); if(nav){ switchTab(nav.dataset.tab); return; }
  const series=t.closest('[data-series]'); if(series){seriesFilter=series.dataset.series;refreshFilterStates();updateListOnly();return;}
@@ -676,6 +674,7 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){ if($('.confirm-backdrop')){dismissConfirm(false);return;} if(activeBarId!=null||settingsOpen) requestCloseSheet(); }});
 render();
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.documentElement.classList.remove('preload')));
 </script>
 </body>
 </html>
